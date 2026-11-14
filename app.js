@@ -50,7 +50,21 @@ function showTip(ev, html) {
   tip.style.left = Math.max(8, x) + "px";
   tip.style.top = Math.max(8, y) + "px";
 }
-const hideTip = () => (tip.style.display = "none");
+let tipCleanup = null; // e.g. hides a chart's crosshair together with the tooltip
+function hideTip() {
+  tip.style.display = "none";
+  if (tipCleanup) { tipCleanup(); tipCleanup = null; }
+}
+// Chart elements with a tooltip: shown on hover (mouse) and on tap (touch, pointerdown).
+function onTip(el, handler) {
+  el.classList.add("hit");
+  el.addEventListener("mousemove", handler);
+  el.addEventListener("pointerdown", handler);
+}
+// Touch screens never send "mouseleave": a tap/click anywhere outside a chart element, or a scroll,
+// closes the tooltip.
+addEventListener("pointerdown", (ev) => { if (!ev.target.closest?.(".hit")) hideTip(); }, { passive: true });
+addEventListener("scroll", hideTip, { passive: true });
 
 /* ---------- theme ---------- */
 (function theme() {
@@ -107,13 +121,14 @@ function lineChart(el, { xs, xLabel, series, yFmt = (v) => fmt(v, 0), height = 3
   // hover layer
   const cross = svg("line", { y1: m.t, y2: H - m.b, stroke: "var(--ink-3)", "stroke-width": 1, visibility: "hidden" }, root);
   const hit = svg("rect", { x: m.l, y: 0, width: W - m.l - m.r, height: H, fill: "transparent" }, root);
-  hit.addEventListener("mousemove", (ev) => {
+  onTip(hit, (ev) => {
     const r = root.getBoundingClientRect();
     const i = Math.max(0, Math.min(xs.length - 1, Math.round(x.inv(ev.clientX - r.left))));
     cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible");
     const rows = series.filter((s) => s.values[i] != null).sort((a, b) => b.values[i] - a.values[i])
       .map((s) => `<div class="row"><span><span class="pdot" style="background:${s.color}"></span>${esc(s.name)}</span><b>${fmt(s.values[i])} ${unit}</b></div>`).join("");
     showTip(ev, `<b>${esc(xLabel(xs[i]))}</b>${rows}`);
+    tipCleanup = () => cross.setAttribute("visibility", "hidden");
   });
   hit.addEventListener("mouseleave", () => { cross.setAttribute("visibility", "hidden"); hideTip(); });
 }
@@ -256,7 +271,7 @@ function drawMap() {
   for (const o of pts) {
     const c = svg("circle", { cx: o.cx, cy: o.cy, r: 6.5, fill: pc(o.p), stroke: "var(--bg)", "stroke-width": 2 }, root);
     const hit = svg("circle", { cx: o.cx, cy: o.cy, r: 14, fill: "transparent" }, root);
-    hit.addEventListener("mousemove", (ev) => showTip(ev, `<b>${NAMES[o.p]}</b> · ${ml(o.cur.m)}
+    onTip(hit, (ev) => showTip(ev, `<b>${NAMES[o.p]}</b> · ${ml(o.cur.m)}
       <div class="row"><span>Kannatus (3 kk ka.)</span><b>${fmt(o.cur.avg)} %</b></div>
       <div class="row"><span>Ero vaaleihin</span><b>${sfmt(o.cur.level)}</b></div>
       <div class="row"><span>Muutos 3 kk</span><b>${sfmt(o.cur.change)}</b></div>
@@ -407,7 +422,7 @@ function drawVoteBars() {
     if (r.defeats) svg("rect", { x: x0, y: y(r.defeats), width: w, height: y(0) - y(r.defeats), fill: "var(--lasku)" }, root);
     if (r.m.endsWith("-01") || i === 0) text(root, x0 + w / 2, H - 6, r.m.slice(0, 4), { "text-anchor": "start" });
     const hit = svg("rect", { x: m.l + i * bw, y: m.t, width: bw, height: H - m.t - m.b, fill: "transparent" }, root);
-    hit.addEventListener("mousemove", (ev) => showTip(ev, `<b>${ml(r.m)}</b><div class="row"><span>Äänestyksiä</span><b>${r.votes}</b></div><div class="row"><span>Hallituksen tappiot</span><b>${r.defeats}</b></div><div class="row"><span>Tiukat</span><b>${r.close}</b></div><div class="row"><span>Poikkeavia ääniä</span><b>${r.rebel}</b></div>`));
+    onTip(hit, (ev) => showTip(ev, `<b>${ml(r.m)}</b><div class="row"><span>Äänestyksiä</span><b>${r.votes}</b></div><div class="row"><span>Hallituksen tappiot</span><b>${r.defeats}</b></div><div class="row"><span>Tiukat</span><b>${r.close}</b></div><div class="row"><span>Poikkeavia ääniä</span><b>${r.rebel}</b></div>`));
     hit.addEventListener("mouseleave", hideTip);
   });
 }
@@ -458,7 +473,7 @@ function drawCompass() {
   text(root, x(0) + 6, m.t + 14, "2. ulottuvuus ↑", { class: "q-label" });
   for (const r of mps) {
     const c = svg("circle", { cx: x(r.x), cy: y(r.y), r: 3.5, fill: pc(r.party), opacity: 0.6 }, root);
-    c.addEventListener("mousemove", (ev) => showTip(ev, `<b>${esc(r.name)}</b> · ${r.party}`));
+    onTip(c, (ev) => showTip(ev, `<b>${esc(r.name)}</b> · ${r.party}`));
     c.addEventListener("mouseleave", hideTip);
   }
   // Parties that sit (almost) on top of each other share one label, e.g. "KOK · PS · RKP · KD".
@@ -511,7 +526,7 @@ function drawIniBars() {
     if (r.over50k) svg("rect", { x: x0, y: y(r.over50k), width: w, height: y(0) - y(r.over50k), fill: "var(--accent)" }, root);
     if (i % Math.ceil(Y.length / 8) === 0) text(root, x0 + w / 2, H - 6, "’" + r.y.slice(2), { "text-anchor": "middle" });
     const hit = svg("rect", { x: m.l + i * bw, y: m.t, width: bw, height: H - m.t - m.b, fill: "transparent" }, root);
-    hit.addEventListener("mousemove", (ev) => showTip(ev, `<b>${r.y}</b><div class="row"><span>Uusia aloitteita</span><b>${r.started}</b></div><div class="row"><span>Yli 50 000</span><b>${r.over50k}</b></div>`));
+    onTip(hit, (ev) => showTip(ev, `<b>${r.y}</b><div class="row"><span>Uusia aloitteita</span><b>${r.started}</b></div><div class="row"><span>Yli 50 000</span><b>${r.over50k}</b></div>`));
     hit.addEventListener("mouseleave", hideTip);
   });
 }
