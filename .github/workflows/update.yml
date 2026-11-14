@@ -23,15 +23,19 @@ jobs:
           python-version: "3.12"
       # Each source is fetched separately; a failing source keeps yesterday's cache.
       - name: Polls
+        id: polls
         run: python scripts/fetch_polls.py
         continue-on-error: true
       - name: Election results
+        id: elections
         run: python scripts/fetch_elections.py
         continue-on-error: true
       - name: Parliament votes
+        id: votes
         run: python scripts/fetch_votes.py
         continue-on-error: true
       - name: Citizens' initiatives
+        id: initiatives
         run: python scripts/fetch_initiatives.py
         continue-on-error: true
       - name: Build site data
@@ -44,3 +48,14 @@ jobs:
           if git diff --cached --quiet; then echo "No changes"; exit 0; fi
           git commit -m "Päivitä data $(date -u +%Y-%m-%d)"
           git push
+      # Fail the run (so GitHub notifies) if any source failed, after saving what did update.
+      - name: Report failed sources
+        if: always()
+        run: |
+          failed=""
+          [ "${{ steps.polls.outcome }}" = failure ] && failed="$failed polls"
+          [ "${{ steps.elections.outcome }}" = failure ] && failed="$failed elections"
+          [ "${{ steps.votes.outcome }}" = failure ] && failed="$failed votes"
+          [ "${{ steps.initiatives.outcome }}" = failure ] && failed="$failed initiatives"
+          if [ -n "$failed" ]; then echo "::error::Failed sources:$failed"; exit 1; fi
+          echo "All sources OK"
