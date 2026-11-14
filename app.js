@@ -181,25 +181,23 @@ fetch("data/site.json", { cache: "no-cache" })
   .then((d) => { D = d; renderAll(); })
   .catch((e) => { $("heroWord").textContent = "Tietoja ei saatu"; console.error(e); });
 
+// Each section renders on its own: one failing section (e.g. a cached older index.html that lacks
+// a new section's elements) must not take the rest of the page down with it.
+function safe(fn) {
+  try { fn(); } catch (e) { console.error(`${fn.name || "section"} failed:`, e); }
+}
 function renderAll() {
-  renderHero();
-  setupMap();
-  renderPartyList();
-  setupLine();
-  renderPollTable();
-  renderSeats();
-  renderParliament();
-  setupCompass();
-  renderInitiatives();
-  renderHistory();
-  $("updated").textContent = "Päivitetty " + D.updated;
-  $("footUpdated").textContent = "päivitetty " + D.updated;
-  $("pollSrc").href = D.polls.source;
-  setupNav();
+  [renderHero, setupMap, renderPartyList, setupLine, renderPollTable, renderSeats, renderParliament,
+   setupCompass, renderInitiatives, renderHistory, renderEconomy, renderAllParties, renderFooter, setupNav].forEach(safe);
   let t;
   addEventListener("resize", () => { clearTimeout(t); t = setTimeout(rerenderCharts, 150); });
 }
-function rerenderCharts() { drawMap(); drawLine(); drawCompass(); renderHistory(); renderParliament(); }
+function renderFooter() {
+  $("updated").textContent = "Päivitetty " + D.updated;
+  $("footUpdated").textContent = "päivitetty " + D.updated;
+  $("pollSrc").href = D.polls.source;
+}
+function rerenderCharts() { [drawMap, drawLine, drawCompass, renderHistory, renderEconomy, renderAllParties, renderParliament].forEach(safe); }
 
 /* ---------- hero ---------- */
 function runStart(series) {
@@ -590,7 +588,7 @@ function governmentBands(nowPos) {
 const govRow = (g) => `<div class="row" style="color:var(--ink-3)"><span>Hallitus: ${esc(g.name)} (${g.parties.join(", ")})</span></div>`;
 
 function renderEconomy() {
-  const E = D.economy; if (!E) return;
+  const E = D.economy; if (!E || !$("econChart") || !$("econMode")) return;
   if (!state.econMode) {
     state.econMode = "esi";
     $("econMode").addEventListener("click", (ev) => {
@@ -612,7 +610,7 @@ function renderEconomy() {
     yMin: isEsi ? undefined : 0, xLabel: ml, ticks,
     tipExtra: (i) => govRow(govAt(pos[i])),
   });
-  $("econNote").textContent = isEsi
+  if ($("econNote")) $("econNote").textContent = isEsi
     ? "Euroopan komission luottamusindikaattori (ESI): yritysten ja kuluttajien luottamuksen yhdistelmä, kausitasoitettu, pitkän aikavälin keskiarvo = 100. Taustan jaksot ovat hallituksia; yläreunan väri = pääministeripuolue."
     : "Työttömyysaste, trendi (% työvoimasta), Eurostat. Taustan jaksot ovat hallituksia; yläreunan väri = pääministeripuolue.";
 }
@@ -626,7 +624,7 @@ const SMALL_NAMES = {
   REM: "Remonttiryhmä", LLP: "Luonnonlakipuolue", SEP: "Suomen Eläkeläisten Puolue",
 };
 function renderAllParties() {
-  const A = D.history.allParties; if (!A || !Object.keys(A).length) return;
+  const A = D.history.allParties; if (!A || !Object.keys(A).length || !$("allParties") || !$("allMode")) return;
   if (!state.allMode) {
     state.allMode = "share";
     $("allMode").addEventListener("click", (ev) => {
@@ -677,8 +675,6 @@ function renderHistory() {
     ticks: [...years.map((y) => ({ pos: +y + 0.25, label: y })), { pos: nowPos, label: "nyt" }].reverse(),
     tipExtra: (i) => govRow(govAt(pos[i] - 0.01)),
   });
-  renderEconomy();
-  renderAllParties();
   $("govList").innerHTML = [...D.history.governments].reverse().map((g) =>
     `<div class="gov"><b>${esc(g.name)}</b><span class="y">${g.start.slice(0, 4)}–${g.end ? g.end.slice(0, 4) : ""}</span>
      <span class="ps">${g.parties.map((p) => `<span style="white-space:nowrap;margin-right:8px"><span class="pdot" style="background:${pc(p)};margin-right:4px"></span>${p}</span>`).join("")}${g.note ? `<span class="note">${esc(g.note)}</span>` : ""}</span></div>`).join("");
