@@ -242,3 +242,11 @@ table.data td.dim { color: var(--ink-3); }
 .fullname { color: var(--ink-3); }
 @media (max-width: 600px) { .fullname { display: none; } }
 @media (max-width: 380px) { .strip i:nth-child(-n+6) { display: none; } }
+.pick { margin: 4px 0 12px; }
+.pick-presets { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 13px; color: var(--ink-2); margin-bottom: 8px; }
+.pick-presets button { border: 1px solid var(--rule); background: var(--bg); color: var(--ink); border-radius: 6px; font: inherit; font-size: 12px; padding: 3px 9px; cursor: pointer; }
+.pick-presets .count { color: var(--ink-3); font-size: 12px; margin-left: 4px; }
+.pick-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.pick-chips button { border: 1px solid var(--rule); background: none; color: var(--ink-3); border-radius: 999px; font: inherit; font-size: 12px; padding: 2px 9px; cursor: pointer; display: inline-flex; align-items: center; }
+.pick-chips button .pdot { width: 8px; height: 8px; margin-right: 5px; }
+.pick-chips button.on { background: var(--surface); color: var(--ink); border-color: var(--ink-3); font-weight: 600; }

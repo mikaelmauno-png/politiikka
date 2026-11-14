@@ -188,7 +188,7 @@ function safe(fn) {
 }
 function renderAll() {
   [renderHero, setupMap, renderPartyList, setupLine, renderPollTable, renderSeats, renderParliament,
-   setupCompass, renderInitiatives, renderHistory, renderEconomy, renderAllParties, renderFooter, setupNav].forEach(safe);
+   renderVaalikone, setupCompass, renderInitiatives, renderHistory, renderEconomy, renderAllParties, renderFooter, setupNav].forEach(safe);
   let t;
   addEventListener("resize", () => { clearTimeout(t); t = setTimeout(rerenderCharts, 150); });
 }
@@ -197,7 +197,7 @@ function renderFooter() {
   $("footUpdated").textContent = "päivitetty " + D.updated;
   $("pollSrc").href = D.polls.source;
 }
-function rerenderCharts() { [drawMap, drawLine, drawCompass, renderHistory, renderEconomy, renderAllParties, renderParliament].forEach(safe); }
+function rerenderCharts() { [drawMap, drawLine, drawVaalikone, drawCompass, renderHistory, renderEconomy, renderAllParties, renderParliament].forEach(safe); }
 
 /* ---------- hero ---------- */
 function runStart(series) {
@@ -536,6 +536,156 @@ function drawCompass() {
     rows.map(([p, [px, py]]) => `<tr><td><span class="pdot" style="background:${pc(p)}"></span>${NAMES[p]}</td><td class="num">${fmt(px * 100, 0)}</td><td class="num">${fmt(py * 100, 0)}</td></tr>`).join("")}</tbody>`;
 }
 
+/* ---------- nelikenttä from election-compass answers ---------- */
+const VK_ABBR = {
+  "Liberaalipuolue": "LIBE", "Vapauden liitto": "VL", "Valta kuuluu kansalle": "VKK", "Suomen Kommunistinen Puolue": "SKP",
+  "Piraattipuolue": "PIR", "Eläinoikeuspuolue": "EOP", "Feministinen puolue": "FP", "Kristallipuolue": "KRIP",
+  "Sinimusta Liike": "SML", "Seitsemän tähden liike": "STL", "Sininen tulevaisuus": "SIN", "Kansalaispuolue": "KaL",
+  "Itsenäisyyspuolue": "IPU", "Suomen Kansa Ensin": "SKE", "Korjausliike": "KORJ", "Sitoutumaton": "Sit.",
+};
+const vkName = (p) => NAMES[p] || p;
+const vkShort = (p) => (D.parties.includes(p) ? p : VK_ABBR[p] || p);
+
+function vkPositions(e) {
+  // -> {party: {x, y, x25, x75, y25, y75, n}} in the current mode (relative = minus the main parties' mean)
+  const main = D.parties.filter((p) => e.parties[p]);
+  const cx = state.vkMode === "rel" ? main.reduce((a, p) => a + e.parties[p].x, 0) / main.length : 0;
+  const cy = state.vkMode === "rel" ? main.reduce((a, p) => a + e.parties[p].y, 0) / main.length : 0;
+  const out = {};
+  for (const [p, v] of Object.entries(e.parties)) {
+    out[p] = { n: v.n, x: v.x - cx, y: v.y - cy, x25: v.x25 - cx, x75: v.x75 - cx, y25: v.y25 - cy, y75: v.y75 - cy };
+  }
+  return out;
+}
+
+function renderVaalikone() {
+  const V = D.vaalikone, el = $("vkBody");
+  if (!el) return;
+  if (!V || !V.elections.length) { el.innerHTML = `<div class="empty">Vaalikonedataa ei ole vielä haettu.</div>`; return; }
+  if (state.vkIdx == null) { state.vkIdx = V.elections.length - 1; state.vkMode = "rel"; state.vkSmall = false; }
+  el.innerHTML = `
+    <div class="grid2"><div>
+      <div class="panel-title"><span>Puolueiden sijainnit</span>
+        <div class="player"><button id="vkPlay" aria-label="Toista">▶</button>
+          <input type="range" id="vkSlider" min="0" max="${V.elections.length - 1}" value="${state.vkIdx}" aria-label="Vaalit">
+          <span class="when" id="vkWhen"></span></div></div>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:8px">
+        <div class="seg" id="vkMode"><button data-m="rel" class="${state.vkMode === "rel" ? "on" : ""}">Suhteessa muihin</button><button data-m="abs" class="${state.vkMode === "abs" ? "on" : ""}">Absoluuttinen</button></div>
+        <label style="font-size:13px;color:var(--ink-2)"><input type="checkbox" id="vkSmall" ${state.vkSmall ? "checked" : ""}> Pienpuolueet</label>
+      </div>
+      <div class="chart" id="vkChart"></div>
+      <div class="legend-note" id="vkNote"></div>
+    </div><div>
+      <div class="panel-title"><span id="vkTitle"></span><span class="meta" id="vkMeta"></span></div>
+      <div class="scroll-x"><table class="data" id="vkTable"></table></div>
+    </div></div>
+    <div class="grid2" style="margin-top:28px" id="vkStatements"></div>`;
+  $("vkSlider").addEventListener("input", (ev) => { state.vkIdx = +ev.target.value; drawVaalikone(); });
+  $("vkMode").addEventListener("click", (ev) => {
+    const b = ev.target.closest("button"); if (!b) return;
+    state.vkMode = b.dataset.m;
+    for (const x of $("vkMode").children) x.classList.toggle("on", x === b);
+    drawVaalikone();
+  });
+  $("vkSmall").addEventListener("change", (ev) => { state.vkSmall = ev.target.checked; drawVaalikone(); });
+  $("vkPlay").addEventListener("click", () => {
+    if (state.vkPlaying) { clearInterval(state.vkPlaying); state.vkPlaying = null; $("vkPlay").textContent = "▶"; return; }
+    state.vkIdx = 0; $("vkSlider").value = 0; drawVaalikone(); $("vkPlay").textContent = "❚❚";
+    state.vkPlaying = setInterval(() => {
+      if (state.vkIdx >= V.elections.length - 1) { clearInterval(state.vkPlaying); state.vkPlaying = null; $("vkPlay").textContent = "▶"; return; }
+      state.vkIdx++; $("vkSlider").value = state.vkIdx; drawVaalikone();
+    }, 1100);
+  });
+  drawVaalikone();
+}
+
+function drawVaalikone() {
+  const V = D.vaalikone, el = $("vkChart");
+  if (!V || !el) return;
+  const E = V.elections, e = E[state.vkIdx], pos = E.map(vkPositions), cur = pos[state.vkIdx];
+  const show = (p) => D.parties.includes(p) || (state.vkSmall && p !== "Sitoutumaton");
+  $("vkWhen").textContent = e.short;
+  $("vkTitle").textContent = e.label;
+  $("vkMeta").textContent = `${e.candidates.toLocaleString("fi-FI")} ehdokasta`;
+  $("vkNote").innerHTML = state.vkMode === "rel"
+    ? "Suhteellinen: 0 = yhdeksän suurimman puolueen keskiarvo kyseisissä vaaleissa. Viiva = puolueen kulku aiempien vaalien kautta, ohut risti = ehdokkaiden 25–75 % vaihteluväli."
+    : "<b>Huom.</b> Absoluuttiset tasot eivät ole vertailukelpoisia vaalien välillä, koska väitteet vaihtuvat (esim. kuntavaalien 2021 väitteet sijoittavat lähes kaikki liberaalimmiksi). Vertaa puolueita saman vaalin sisällä.";
+  // extent over all elections for a stable frame
+  let ext = 0.3;
+  pos.forEach((P) => Object.entries(P).forEach(([p, v]) => { if (show(p)) ext = Math.max(ext, Math.abs(v.x), Math.abs(v.y)); }));
+  ext = Math.min(1, Math.ceil(ext * 1.15 * 10) / 10);
+  el.innerHTML = "";
+  const W = el.clientWidth || 600, H = Math.min(520, Math.max(340, W * 0.9)), m = { l: 30, r: 12, t: 22, b: 30 };
+  const x = scale(-ext, ext, m.l, W - m.r), y = scale(-ext, ext, H - m.b, m.t);
+  const root = svg("svg", { width: W, height: H, role: "img", "aria-label": "Nelikenttä" }, el);
+  const g = svg("g", { class: "grid" }, root);
+  const step = niceStep(2 * ext * 100, 6) / 100;
+  for (let v = -Math.floor(ext / step) * step; v <= ext + 1e-9; v += step) {
+    svg("line", { x1: x(v), x2: x(v), y1: m.t, y2: H - m.b }, g);
+    svg("line", { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v) }, g);
+    text(root, x(v), H - m.b + 14, fmt(v * 100, 0), { "text-anchor": "middle" });
+    text(root, m.l - 5, y(v) + 4, fmt(v * 100, 0), { "text-anchor": "end" });
+  }
+  svg("line", { class: "zero", x1: x(0), x2: x(0), y1: m.t, y2: H - m.b, "stroke-width": 1.5 }, root);
+  svg("line", { class: "zero", x1: m.l, x2: W - m.r, y1: y(0), y2: y(0), "stroke-width": 1.5 }, root);
+  text(root, m.l + 4, m.t - 8, "↑ konservatiivinen", { class: "q-label" });
+  text(root, m.l + 4, H - 4, "← vasemmisto", { class: "q-label" });
+  text(root, W - m.r - 4, H - 4, "oikeisto →", { class: "q-label", "text-anchor": "end" });
+  text(root, m.l + 4, H - m.b - 6, "↓ liberaali", { class: "q-label" });
+
+  const drawn = Object.keys(cur).filter(show);
+  // trails (main parties, relative mode only)
+  if (state.vkMode === "rel") {
+    for (const p of drawn.filter((p) => D.parties.includes(p))) {
+      const pts = pos.slice(0, state.vkIdx + 1).map((P) => P[p]).filter(Boolean);
+      if (pts.length > 1) {
+        svg("polyline", { points: pts.map((v) => `${x(v.x)},${y(v.y)}`).join(" "), fill: "none", stroke: pc(p), "stroke-width": 1.5, opacity: 0.5, "stroke-linejoin": "round" }, root);
+        pts.slice(0, -1).forEach((v) => svg("circle", { cx: x(v.x), cy: y(v.y), r: 2.5, fill: "var(--bg)", stroke: pc(p), "stroke-width": 1.2, opacity: 0.7 }, root));
+      }
+    }
+  }
+  // spread crosses
+  for (const p of drawn) {
+    const v = cur[p], col = D.parties.includes(p) ? pc(p) : "var(--ink-3)";
+    svg("line", { x1: x(v.x25), x2: x(v.x75), y1: y(v.y), y2: y(v.y), stroke: col, "stroke-width": 2, opacity: 0.3, "stroke-linecap": "round" }, root);
+    svg("line", { x1: x(v.x), x2: x(v.x), y1: y(v.y25), y2: y(v.y75), stroke: col, "stroke-width": 2, opacity: 0.3, "stroke-linecap": "round" }, root);
+  }
+  const clusters = [];
+  for (const p of drawn.sort((a, b) => D.parties.includes(a) - D.parties.includes(b))) {
+    const v = cur[p], main = D.parties.includes(p), cx = x(v.x), cy = y(v.y);
+    svg("circle", { cx, cy, r: main ? 7 : 4.5, fill: main ? pc(p) : "var(--ink-3)", stroke: "var(--bg)", "stroke-width": 2 }, root);
+    const hit = svg("circle", { cx, cy, r: 14, fill: "transparent" }, root);
+    const prev = state.vkIdx > 0 ? pos[state.vkIdx - 1][p] : null;
+    onTip(hit, (ev) => showTip(ev, `<b>${esc(vkName(p))}</b> · ${esc(e.label)}
+      <div class="row"><span>Talous (vas. − / oik. +)</span><b>${fmt(v.x * 100, 0)}</b></div>
+      <div class="row"><span>Arvot (lib. − / kons. +)</span><b>${fmt(v.y * 100, 0)}</b></div>
+      ${prev ? `<div class="row"><span>Muutos edellisistä</span><b>${sfmt((v.x - prev.x) * 100, 0)} / ${sfmt((v.y - prev.y) * 100, 0)}</b></div>` : ""}
+      <div class="row"><span>Ehdokkaita</span><b>${v.n}</b></div>`));
+    const c = clusters.find((k) => Math.hypot(k.x - cx, k.y - cy) < 14);
+    if (c) c.names.push(vkShort(p)); else clusters.push({ x: cx, y: cy, names: [vkShort(p)], main });
+  }
+  for (const c of clusters) text(root, c.x, c.y - (c.main ? 11 : 8), c.names.join(" · "), { class: "lab", "text-anchor": "middle", "font-size": c.main ? 11 : 10 });
+
+  // table
+  const prevP = state.vkIdx > 0 ? pos[state.vkIdx - 1] : null;
+  const rows = drawn.slice().sort((a, b) => (D.parties.includes(b) - D.parties.includes(a)) || cur[a].x - cur[b].x);
+  const d = (p, k) => (prevP && prevP[p] ? sfmt((cur[p][k] - prevP[p][k]) * 100, 0) : "");
+  $("vkTable").innerHTML = `<thead><tr><th>Puolue</th><th class="num">Talous</th><th class="num">Arvot</th><th class="num">Δ talous</th><th class="num">Δ arvot</th></tr></thead><tbody>${
+    rows.map((p) => `<tr><td style="white-space:nowrap">${D.parties.includes(p) ? `<span class="pdot" style="background:${pc(p)}"></span>` : ""}${esc(vkName(p))}</td>
+      <td class="num">${fmt(cur[p].x * 100, 0)}</td><td class="num">${fmt(cur[p].y * 100, 0)}</td>
+      <td class="num" style="color:var(--ink-3)">${d(p, "x")}</td><td class="num" style="color:var(--ink-3)">${d(p, "y")}</td></tr>`).join("")
+  }</tbody>`;
+
+  // statements used
+  const list = (items, plus, minus) => items.map((it) =>
+    `<li>${esc(it.text)}<div class="meta"><span>samaa mieltä → <b>${it.dir > 0 ? plus : minus}</b></span></div></li>`).join("");
+  $("vkStatements").innerHTML = `
+    <div><div class="panel-title"><span>Vaaka-akseli: talous (${e.statements.economy.length} väitettä)</span></div>
+      <ul class="ini">${list(e.statements.economy, "oikealle", "vasemmalle")}</ul></div>
+    <div><div class="panel-title"><span>Pystyakseli: arvot (${e.statements.values.length} väitettä)</span></div>
+      <ul class="ini">${list(e.statements.values, "konservatiiviseen", "liberaaliin")}</ul></div>`;
+}
+
 /* ---------- initiatives ---------- */
 function renderInitiatives() {
   const I = D.initiatives, el = $("iniBody");
@@ -641,6 +791,41 @@ function renderAllParties() {
     return tail(a) - tail(b) || (b.votes[last] || 0) - (a.votes[last] || 0) || lastYear(b).localeCompare(lastYear(a)) ||
       Math.max(...Object.values(b.votes)) - Math.max(...Object.values(a.votes));
   });
+  // Party picker (built here, not in index.html, so a cached older page still gets it)
+  const baseOf = (r) => r.abbr.replace(/ \(\d{4}\)$/, "");
+  const parliament = rows.filter((r) => D.parties.includes(baseOf(r))).map((r) => r.abbr);
+  if (!state.allPick) {
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem("allPick") || "null"); } catch (e) {}
+    state.allPick = new Set(Array.isArray(saved) ? saved : parliament);
+  }
+  const savePick = () => { try { localStorage.setItem("allPick", JSON.stringify([...state.allPick])); } catch (e) {} };
+  let pick = $("allPick");
+  if (!pick) {
+    pick = document.createElement("div");
+    pick.id = "allPick";
+    pick.className = "pick";
+    $("allParties").closest(".scroll-x").before(pick);
+    pick.addEventListener("click", (ev) => {
+      const b = ev.target.closest("button"); if (!b) return;
+      if (b.dataset.preset === "parl") state.allPick = new Set(parliament);
+      else if (b.dataset.preset === "all") state.allPick = new Set(rows.map((r) => r.abbr));
+      else if (b.dataset.preset === "none") state.allPick = new Set();
+      else if (b.dataset.p) state.allPick.has(b.dataset.p) ? state.allPick.delete(b.dataset.p) : state.allPick.add(b.dataset.p);
+      savePick();
+      renderAllParties();
+    });
+  }
+  pick.innerHTML = `<div class="pick-presets"><span>Näytä:</span>
+      <button data-preset="parl">Eduskuntapuolueet</button><button data-preset="all">Kaikki</button><button data-preset="none">Tyhjennä</button>
+      <span class="count">${state.allPick.size} / ${rows.length} valittu</span></div>
+    <div class="pick-chips">${rows.map((r) => {
+      const b = baseOf(r), dot = D.parties.includes(b) ? `<span class="pdot" style="background:${pc(b)}"></span>` : "";
+      const full = (NAMES[b] && b !== "Muut" ? NAMES[b] : SMALL_NAMES[b]) || r.abbr;
+      return `<button data-p="${esc(r.abbr)}" class="${state.allPick.has(r.abbr) ? "on" : ""}" title="${esc(full)}" aria-pressed="${state.allPick.has(r.abbr)}">${dot}${esc(r.abbr)}</button>`;
+    }).join("")}</div>`;
+  const shown = rows.filter((r) => state.allPick.has(r.abbr));
+
   const cell = (r, y) => {
     const v = r.votes[y]; if (!v) return `<td class="num"></td>`;
     if (state.allMode === "votes") return `<td class="num">${v.toLocaleString("fi-FI")}</td>`;
@@ -649,7 +834,8 @@ function renderAllParties() {
   };
   const best = (r) => { const y = Object.keys(r.votes).sort((a, b) => r.votes[b] - r.votes[a])[0]; return `${state.allMode === "votes" ? r.votes[y].toLocaleString("fi-FI") : (r.share[y] ? fmt(r.share[y]) + " %" : "<0,1 %")} (${y})`; };
   $("allParties").innerHTML = `<thead><tr><th>Puolue</th>${years.map((y) => `<th class="num">${y}</th>`).join("")}<th class="num">Paras</th></tr></thead><tbody>${
-    rows.map((r) => {
+    shown.length ? "" : `<tr><td colspan="${years.length + 2}" style="color:var(--ink-3)">Valitse puolueita yltä.</td></tr>`}${
+    shown.map((r) => {
       const base = r.abbr.replace(/ \(\d{4}\)$/, ""), full = NAMES[base] && base !== "Muut" ? NAMES[base] : SMALL_NAMES[base];
       const dot = D.parties.includes(base) ? `<span class="pdot" style="background:${pc(base)}"></span>` : "";
       return `<tr><td style="white-space:nowrap">${dot}<b title="${esc(full || r.abbr)}">${esc(r.abbr)}</b>${full && full !== base ? ` <span class="fullname">${esc(full)}</span>` : ""}</td>${years.map((y) => cell(r, y)).join("")}<td class="num" style="white-space:nowrap">${best(r)}</td></tr>`;

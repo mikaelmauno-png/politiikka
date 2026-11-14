@@ -8,7 +8,7 @@ Staattinen sivu (`index.html`, `app.js`, `style.css`), joka lukee yhden tiedosto
 - **Kannatuskartta**: puolueet tason (ero vuoden 2023 vaaleihin) ja 3 kk muutoksen nelikentässä, aikaliukuri
 - **Paikkaennuste**: mittausten keskiarvo → vaalipiirikohtainen d'Hondt
 - **Eduskunta**: ryhmien yhtenäisyys, läsnäolo, hallituksen tappiot, ryhmien samanlaisuus, linjasta poikkeajat
-- **Nelikenttä**: edustajien sijainti äänestyskäyttäytymisen perusteella (MDS), kausittain
+- **Nelikenttä**: puolueet vasemmisto–oikeisto- ja liberaali–konservatiivi-akseleilla Ylen vaalikoneen ehdokasvastauksista (2019, 2021, 2023, 2025); väitteiden luokittelu `scripts/vaalikone_scales.py`. Lisäksi äänestyskartta: kuka äänestää kenen kanssa (MDS)
 - **Kansalaisaloitteet** ja **historia** (talous ja hallitukset 1985–, vaalitulokset 1983–2023, hallitukset)
 
 ## Data
@@ -18,6 +18,7 @@ Staattinen sivu (`index.html`, `app.js`, `style.css`), joka lukee yhden tiedosto
 | `scripts/fetch_elections.py` | Tilastokeskus StatFin | `data/cache/elections.json` |
 | `scripts/fetch_votes.py` | Eduskunnan avoin data (inkrementaalinen) | `data/cache/votes.jsonl`, `mps.json` |
 | `scripts/fetch_initiatives.py` | kansalaisaloite.fi | `data/cache/initiatives.json` |
+| `scripts/fetch_vaalikone.py` | Ylen vaalikoneen avoin data (CC BY); lataa vain puuttuvat vaalit | `data/cache/vaalikone.json` |
 | `scripts/fetch_economy.py` | Eurostat: luottamusindikaattori (ESI) ja työttömyysaste | `data/cache/economy.json` |
 | `scripts/build.py` | kaikki yllä | `data/site.json` |
 
@@ -30,3 +31,5 @@ cd .. && python3 -m http.server 8791
 ```
 
 Hallituskokoonpano on `scripts/common.py`:n `GOVERNMENT`-listassa – päivitä, jos hallitus vaihtuu.
+
+Uusien vaalien vaalikone (esim. eduskuntavaalit 2027): lisää vaali ja sen väitteet `scripts/vaalikone_scales.py`:hin ja latauslogiikka `fetch_vaalikone.py`:n `load()`-funktioon.

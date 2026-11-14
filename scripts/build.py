@@ -450,6 +450,13 @@ def build_initiatives(items, today):
             "byYear": [{"y": y, **by_year[y]} for y in sorted(by_year)], "total": len(items)}
 
 
+def build_vaalikone(raw):
+    if not raw:
+        return None
+    return {"source": raw["source"],
+            "elections": [{k: v for k, v in e.items() if k != "defs"} for e in raw["elections"]]}
+
+
 def main():
     today = datetime.date.today()
     polls = build_polls(read_json(f"{CACHE}/polls.json"), today)
@@ -467,6 +474,7 @@ def main():
         "compass": build_compass(votes, mps),
         "initiatives": build_initiatives(read_json(f"{CACHE}/initiatives.json", []), today),
         "economy": read_json(f"{CACHE}/economy.json"),
+        "vaalikone": build_vaalikone(read_json(f"{CACHE}/vaalikone.json")),
         "nextElection": "2027-04-18",
     }
     write_json(f"{DATA}/site.json", site)

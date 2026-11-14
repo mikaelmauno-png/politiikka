@@ -90,8 +90,12 @@
 
   <!-- COMPASS -->
   <section id="nelikentta" class="block">
-    <div class="section-head"><h2>Nelikenttä äänestyskäyttäytymisestä</h2><span class="meta" id="compassMeta"></span></div>
-    <p class="lede">Kansanedustajat sijoitetaan kartalle sen mukaan, kuinka usein he äänestävät samoin kuin muut (moniulotteinen skaalaus kiistanalaisista äänestyksistä). Lähekkäin olevat äänestävät samalla tavalla. Akseleita ei ole nimetty etukäteen: Suomessa ensimmäinen ulottuvuus erottaa käytännössä hallituksen ja opposition.</p>
+    <div class="section-head"><h2>Nelikenttä</h2><span class="meta">Ylen vaalikoneen ehdokasvastaukset</span></div>
+    <p class="lede">Puolueen sijainti lasketaan sen ehdokkaiden vastauksista Ylen vaalikoneeseen. Vaaka-akselin muodostavat talous- ja hyvinvointiväitteet (verot, menot, julkiset vs. yksityiset palvelut), pystyakselin arvoväitteet (maahanmuutto, vähemmistöt, päihteet, perinteiset arvot, järjestys). Käytetyt väitteet näkyvät kuvan alla.</p>
+    <div id="vkBody"></div>
+
+    <div class="section-head" style="margin-top:44px;border-top-width:1px"><h3 style="font-size:17px">Kuka äänestää kenen kanssa eduskunnassa</h3><span class="meta" id="compassMeta"></span></div>
+    <p class="lede">Tämä kartta ei kuvaa arvoja vaan äänestyskäyttäytymistä: edustajat ovat sitä lähempänä toisiaan, mitä useammin he äänestävät samoin (kiistanalaiset täysistuntoäänestykset 2023–). Vaaka-akseli erottaa hallituksen ja opposition; pystyakseli on toiseksi suurin ero, ja sen määräävät äänestykset näkyvät alla.</p>
     <div id="compassBody"></div>
   </section>
 
@@ -123,7 +127,7 @@
       </div>
     </div>
     <div style="margin-top:36px">
-      <div class="panel-title"><span>Kaikki ehdokkaita asettaneet puolueet</span>
+      <div class="panel-title"><span>Puolueet eduskuntavaaleissa 1983–2023</span>
         <div class="seg" id="allMode"><button data-m="share" class="on">% äänistä</button><button data-m="votes">Äänet</button></div></div>
       <div class="scroll-x"><table class="data sticky1" id="allParties"></table></div>
       <div class="legend-note">Koko maan tulos eduskuntavaaleissa. Tilastokeskus yhdistää puolueen edeltäjät seuraajiin (esim. SMP → PS, SKDL → VAS); suluissa oleva vuosi on puolueen viimeiset vaalit. "Muu puolue" kokoaa vanhempia pienpuolueita, "Muut" valitsijayhdistykset ja muut. Lyhenteet Tilastokeskuksen luokituksesta.</div>
@@ -138,7 +142,9 @@
       <p>Kuukauden kannatus on kunkin tutkimuslaitoksen kuukauden viimeisimmän mittauksen keskiarvo. Siitä lasketaan kolmen kuukauden liukuva keskiarvo. <b>Taso</b> on liukuvan keskiarvon ero vuoden 2023 eduskuntavaalitulokseen ja <b>muutos</b> liukuvan keskiarvon muutos kolmessa kuukaudessa. Vaiheet: <span class="chip nousu">Nousu</span> taso ≥ 0 ja kasvaa, <span class="chip hidastuminen">Hidastuminen</span> taso ≥ 0 ja laskee, <span class="chip lasku">Lasku</span> taso &lt; 0 ja laskee, <span class="chip elpyminen">Elpyminen</span> taso &lt; 0 ja kasvaa.</p>
       <h3>Eduskunta</h3>
       <p>Mukana ovat vaalikauden 2023– täysistuntojen nimenhuutoäänestykset (mitätöidyt pois). Puolueen linja on ryhmän jaa- ja ei-äänten enemmistö. <b>Yhtenäisyys</b> on Hixin yksimielisyysindeksi (100 = kaikki läsnäolijat äänestivät samoin) laskettuna kiistanalaisista äänestyksistä, joissa vähemmistö on vähintään 10 %. <b>Poikkeava ääni</b> on jaa- tai ei-ääni oman ryhmän linjaa vastaan. <b>Hallituksen tappio</b> on äänestys, jossa hallitusryhmien yhteenlaskettu enemmistö hävisi. Kaikki tappiot eivät ole poliittisesti merkittäviä (esim. lausumaehdotukset).</p>
-      <h3>Nelikenttä</h3>
+      <h3>Nelikenttä (vaalikone)</h3>
+      <p>Aineisto: Ylen vaalikoneen ehdokasvastaukset avoimena datana (CC BY): eduskuntavaalit 2019 ja 2023, kuntavaalit 2021 sekä alue- ja kuntavaalit 2025. Vastaus 1–5 muunnetaan asteikolle −1…+1 (täysin eri mieltä … täysin samaa mieltä), ja väitteissä, joissa samaa mieltä oleminen on vasemmistolainen tai liberaali kanta, merkki käännetään. Ehdokkaan sijainti akselilla on näiden keskiarvo (vähintään 60 % akselin väitteistä vastattu), puolueen sijainti ehdokkaiden keskiarvo ja hajonta ehdokkaiden 25–75 %:n vaihteluväli. Ilmasto- ja ympäristöväitteet on jätetty pois molemmista akseleista. Koska vaalikoneiden väitteet vaihtuvat, vaalien välisiä tasoja ei voi suoraan verrata: oletusnäkymä näyttää puolueet suhteessa yhdeksän suurimman puolueen keskiarvoon kussakin vaalissa. Väitteiden luokittelu on oma.</p>
+      <h3>Äänestyskartta</h3>
       <p>Kahden edustajan etäisyys = osuus yhteisistä jaa/ei-äänestyksistä, joissa he äänestivät eri tavoin. Mukana vain äänestykset, joissa vähemmistö on vähintään 10 %, ja edustajat, jotka ovat äänestäneet vähintään 25 %:ssa niistä. Etäisyyksistä lasketaan kaksiulotteinen klassinen moniulotteinen skaalaus; liukuvat 12 kuukauden kartat kierretään koko vaalikauden kartan suuntaan (Procrustes). Akselit ovat tilastollisia, eivät vasemmisto–oikeisto- tai liberaali–konservatiivi-asteikkoja. Akselin tulkinnan tueksi näytetään äänestykset, joissa jaa/ei-ääni korreloi vahvimmin edustajan sijainnin kanssa akselilla (point-biserial-korrelaatio); samaa asiaa koskevista äänestyksistä näytetään vain vahvin.</p>
       <h3>Lähteet</h3>
       <ul>
@@ -146,6 +152,7 @@
         <li>Vaalitulokset ja paikat: Tilastokeskus, StatFin (eduskuntavaalit).</li>
         <li>Äänestykset: Eduskunnan avoin data (avoindata.eduskunta.fi).</li>
         <li>Kansalaisaloitteet: kansalaisaloite.fi API.</li>
+        <li>Nelikenttä: Ylen vaalikoneen avoin data (CC BY), <a href="https://yle.fi/a/20-10006887">yle.fi/a/20-10006887</a>.</li>
         <li>Talous: Eurostat – Euroopan komission luottamusindikaattori (Economic Sentiment Indicator, ei_bssi_m_r2) ja työttömyysasteen trendi (une_rt_m).</li>
       </ul>
       <p>Luvut haetaan automaattisesti kerran vuorokaudessa. Laskelmat ja esitystapa ovat omia; mittauksilla on virhemarginaali (noin ±1–2 %-yks.).</p>

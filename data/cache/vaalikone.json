@@ -1,0 +1,1164 @@
+{
+ "source": "https://yle.fi/a/20-10006887",
+ "elections": [
+  {
+   "key": "e2019",
+   "label": "Eduskuntavaalit 2019",
+   "short": "EK 2019",
+   "date": "2019-04",
+   "candidates": 2251,
+   "statements": {
+    "economy": [
+     {
+      "text": "Kun valtion menoja ja tuloja tasapainotetaan, se on tehtävä mieluummin menoja karsimalla kuin veroja kiristämällä.",
+      "dir": 1
+     },
+     {
+      "text": "Sosiaali- ja terveyspalvelut on tuotettava ensisijaisesti julkisina palveluina.",
+      "dir": -1
+     },
+     {
+      "text": "Vanhustenhoidon ulkoistamista yksityisille toimijoille tulee lisätä.",
+      "dir": 1
+     },
+     {
+      "text": "On oikein, että yhteiskunnassa jotkut ryhmät ovat paremmassa asemassa kuin toiset.",
+      "dir": 1
+     }
+    ],
+    "values": [
+     {
+      "text": "Parantumattomasti sairaalla on oltava oikeus eutanasiaan.",
+      "dir": -1
+     },
+     {
+      "text": "Sukupuolen korjaamisen tulee olla mahdollista myös alle 18-vuotiaille.",
+      "dir": -1
+     },
+     {
+      "text": "Viinit ja vahvat oluet pitää saada ruokakauppoihin.",
+      "dir": -1
+     },
+     {
+      "text": "Perhevapaita pitää uudistaa niin, että vapaat jakautuvat tasan vanhempien kesken.",
+      "dir": -1
+     },
+     {
+      "text": "Maahanmuuttajien määrän kasvu on lisännyt turvattomuutta Suomessa.",
+      "dir": 1
+     },
+     {
+      "text": "Vihapuhe tulee määritellä ja asettaa rangaistavaksi rikoslaissa.",
+      "dir": -1
+     },
+     {
+      "text": "Perinteiset arvot ovat hyvän elämän perusta.",
+      "dir": 1
+     },
+     {
+      "text": "Suomessa tarvitaan nyt koviakin keinoja järjestyksen ja tavallisten ihmisten puolustamiseksi.",
+      "dir": 1
+     },
+     {
+      "text": "On olemassa pyhiä tai muuten yksilöä suurempia asioita, joita täytyy puolustaa silloinkin, kun se vaatii omien etujen uhraamista.",
+      "dir": 1
+     }
+    ]
+   },
+   "parties": {
+    "KOK": {
+     "n": 208,
+     "x": 0.088,
+     "y": 0.097,
+     "x25": -0.125,
+     "x75": 0.25,
+     "y25": -0.111,
+     "y75": 0.278
+    },
+    "Suomen Kommunistinen Puolue": {
+     "n": 65,
+     "x": -0.879,
+     "y": -0.272,
+     "x25": -1.0,
+     "x75": -0.875,
+     "y25": -0.444,
+     "y75": -0.111
+    },
+    "PS": {
+     "n": 208,
+     "x": -0.254,
+     "y": 0.479,
+     "x25": -0.5,
+     "x75": -0.125,
+     "y25": 0.389,
+     "y75": 0.556
+    },
+    "RKP": {
+     "n": 97,
+     "x": -0.238,
+     "y": -0.158,
+     "x25": -0.375,
+     "x75": -0.125,
+     "y25": -0.333,
+     "y75": 0.056
+    },
+    "Seitsemän tähden liike": {
+     "n": 139,
+     "x": -0.473,
+     "y": 0.394,
+     "x25": -0.625,
+     "x75": -0.375,
+     "y25": 0.222,
+     "y75": 0.556
+    },
+    "SDP": {
+     "n": 209,
+     "x": -0.751,
+     "y": -0.063,
+     "x25": -0.875,
+     "x75": -0.625,
+     "y25": -0.222,
+     "y75": 0.111
+    },
+    "Kansalaispuolue": {
+     "n": 44,
+     "x": -0.44,
+     "y": 0.367,
+     "x25": -0.625,
+     "x75": -0.219,
+     "y25": 0.167,
+     "y75": 0.556
+    },
+    "Feministinen puolue": {
+     "n": 37,
+     "x": -0.902,
+     "y": -0.518,
+     "x25": -1.0,
+     "x75": -0.875,
+     "y25": -0.611,
+     "y75": -0.5
+    },
+    "KD": {
+     "n": 175,
+     "x": -0.327,
+     "y": 0.609,
+     "x25": -0.5,
+     "x75": -0.125,
+     "y25": 0.472,
+     "y75": 0.722
+    },
+    "Itsenäisyyspuolue": {
+     "n": 41,
+     "x": -0.54,
+     "y": 0.08,
+     "x25": -0.875,
+     "x75": -0.375,
+     "y25": -0.056,
+     "y75": 0.278
+    },
+    "Sitoutumaton": {
+     "n": 18,
+     "x": -0.137,
+     "y": 0.374,
+     "x25": -0.5,
+     "x75": 0.125,
+     "y25": 0.194,
+     "y75": 0.556
+    },
+    "Sininen tulevaisuus": {
+     "n": 113,
+     "x": -0.233,
+     "y": 0.268,
+     "x25": -0.5,
+     "x75": 0.0,
+     "y25": 0.056,
+     "y75": 0.444
+    },
+    "VAS": {
+     "n": 205,
+     "x": -0.87,
+     "y": -0.275,
+     "x25": -1.0,
+     "x75": -0.875,
+     "y25": -0.444,
+     "y75": -0.125
+    },
+    "Suomen Kansa Ensin": {
+     "n": 32,
+     "x": -0.258,
+     "y": 0.488,
+     "x25": -0.5,
+     "x75": -0.125,
+     "y25": 0.333,
+     "y75": 0.635
+    },
+    "KESK": {
+     "n": 208,
+     "x": -0.322,
+     "y": 0.219,
+     "x25": -0.5,
+     "x75": -0.125,
+     "y25": 0.056,
+     "y75": 0.389
+    },
+    "VIHR": {
+     "n": 211,
+     "x": -0.659,
+     "y": -0.332,
+     "x25": -0.875,
+     "x75": -0.5,
+     "y25": -0.5,
+     "y75": -0.167
+    },
+    "Piraattipuolue": {
+     "n": 74,
+     "x": -0.336,
+     "y": -0.201,
+     "x25": -0.625,
+     "x75": 0.0,
+     "y25": -0.333,
+     "y75": -0.014
+    },
+    "Liberaalipuolue": {
+     "n": 36,
+     "x": 0.205,
+     "y": -0.127,
+     "x25": 0.0,
+     "x75": 0.406,
+     "y25": -0.333,
+     "y75": 0.056
+    },
+    "Eläinoikeuspuolue": {
+     "n": 16,
+     "x": -0.766,
+     "y": -0.285,
+     "x25": -1.0,
+     "x75": -0.625,
+     "y25": -0.417,
+     "y75": -0.208
+    },
+    "LIIK": {
+     "n": 103,
+     "x": -0.225,
+     "y": 0.068,
+     "x25": -0.5,
+     "x75": 0.0,
+     "y25": -0.111,
+     "y75": 0.236
+    }
+   },
+   "defs": {
+    "economy": [
+     [
+      "Kun valtion menoja ja tuloja tasapainotetaan, se on tehtävä mieluummin menoja karsimalla",
+      1
+     ],
+     [
+      "Sosiaali- ja terveyspalvelut on tuotettava ensisijaisesti julkisina palveluina",
+      -1
+     ],
+     [
+      "Vanhustenhoidon ulkoistamista yksityisille toimijoille tulee lisätä",
+      1
+     ],
+     [
+      "On oikein, että yhteiskunnassa jotkut ryhmät ovat paremmassa asemassa kuin toiset",
+      1
+     ]
+    ],
+    "values": [
+     [
+      "Parantumattomasti sairaalla on oltava oikeus eutanasiaan",
+      -1
+     ],
+     [
+      "Sukupuolen korjaamisen tulee olla mahdollista myös alle 18-vuotiaille",
+      -1
+     ],
+     [
+      "Viinit ja vahvat oluet pitää saada ruokakauppoihin",
+      -1
+     ],
+     [
+      "Perhevapaita pitää uudistaa niin, että vapaat jakautuvat tasan",
+      -1
+     ],
+     [
+      "Maahanmuuttajien määrän kasvu on lisännyt turvattomuutta",
+      1
+     ],
+     [
+      "Vihapuhe tulee määritellä ja asettaa rangaistavaksi",
+      -1
+     ],
+     [
+      "Perinteiset arvot ovat hyvän elämän perusta",
+      1
+     ],
+     [
+      "Suomessa tarvitaan nyt koviakin keinoja järjestyksen",
+      1
+     ],
+     [
+      "On olemassa pyhiä tai muuten yksilöä suurempia asioita",
+      1
+     ]
+    ]
+   }
+  },
+  {
+   "key": "k2021",
+   "label": "Kuntavaalit 2021",
+   "short": "KV 2021",
+   "date": "2021-06",
+   "candidates": 18307,
+   "statements": {
+    "economy": [
+     {
+      "text": "Eniten ansaitsevat ihmiset voisivat maksaa enemmän kuntaveroa kuin nykyään.",
+      "dir": -1
+     },
+     {
+      "text": "Kun kunnan menoja ja tuloja tasapainotetaan, se on tehtävä mieluummin menoja karsimalla kuin veroja kiristämällä.",
+      "dir": 1
+     },
+     {
+      "text": "Kaikille vanhuksille on taattava oikeus palvelukotipaikkaan.",
+      "dir": -1
+     },
+     {
+      "text": "Lähikirjastoja tarvitaan nykyistä vähemmän, kun kirjat ja muu aineisto muuttuvat digitaalisiksi.",
+      "dir": 1
+     }
+    ],
+    "values": [
+     {
+      "text": "Kuntani pärjäisi hyvin ilman maahanmuuttoa.",
+      "dir": 1
+     },
+     {
+      "text": "Kuntani pitää edistää oleskeluluvan saaneiden turvapaikanhakijoiden kotoutumista.",
+      "dir": -1
+     },
+     {
+      "text": "Kuntani pitää tarjota maksuton ehkäisy alle 25-vuotiaille.",
+      "dir": -1
+     },
+     {
+      "text": "Kuntani pitää järjestää huumeidenkäyttäjille mahdollisuus vaihtaa käytetyt neulansa puhtaisiin.",
+      "dir": -1
+     },
+     {
+      "text": "Koulun on pidettävä yllä kristillisiä perinteitä.",
+      "dir": 1
+     },
+     {
+      "text": "Politiikassa tarvitaan vahvoja johtajia, jotka panevat asiat kuntoon ilman kompromisseja.",
+      "dir": 1
+     },
+     {
+      "text": "Kuntani pitää järjestää liputus Pride-tapahtuman kunniaksi.",
+      "dir": -1
+     },
+     {
+      "text": "Äänioikeuden ikäraja kuntavaaleissa pitäisi laskea 16 vuoteen.",
+      "dir": -1
+     }
+    ]
+   },
+   "parties": {
+    "KESK": {
+     "n": 3357,
+     "x": -0.113,
+     "y": -0.099,
+     "x25": -0.25,
+     "x75": 0.0,
+     "y25": -0.357,
+     "y75": 0.125
+    },
+    "KOK": {
+     "n": 3444,
+     "x": 0.12,
+     "y": -0.131,
+     "x25": 0.0,
+     "x75": 0.25,
+     "y25": -0.375,
+     "y75": 0.125
+    },
+    "SDP": {
+     "n": 2676,
+     "x": -0.376,
+     "y": -0.369,
+     "x25": -0.625,
+     "x75": -0.125,
+     "y25": -0.625,
+     "y75": -0.188
+    },
+    "PS": {
+     "n": 2570,
+     "x": -0.013,
+     "y": 0.361,
+     "x25": -0.25,
+     "x75": 0.125,
+     "y25": 0.172,
+     "y75": 0.562
+    },
+    "VIHR": {
+     "n": 2090,
+     "x": -0.43,
+     "y": -0.693,
+     "x25": -0.625,
+     "x75": -0.25,
+     "y25": -0.875,
+     "y75": -0.562
+    },
+    "Feministinen puolue": {
+     "n": 47,
+     "x": -0.739,
+     "y": -0.891,
+     "x25": -1.0,
+     "x75": -0.625,
+     "y25": -1.0,
+     "y75": -0.844
+    },
+    "RKP": {
+     "n": 769,
+     "x": -0.132,
+     "y": -0.419,
+     "x25": -0.375,
+     "x75": 0.0,
+     "y25": -0.688,
+     "y75": -0.25
+    },
+    "VAS": {
+     "n": 1441,
+     "x": -0.691,
+     "y": -0.651,
+     "x25": -0.875,
+     "x75": -0.5,
+     "y25": -0.875,
+     "y75": -0.5
+    },
+    "KD": {
+     "n": 779,
+     "x": -0.141,
+     "y": 0.111,
+     "x25": -0.375,
+     "x75": 0.0,
+     "y25": -0.062,
+     "y75": 0.312
+    },
+    "LIIK": {
+     "n": 347,
+     "x": -0.021,
+     "y": -0.154,
+     "x25": -0.25,
+     "x75": 0.125,
+     "y25": -0.438,
+     "y75": 0.125
+    },
+    "Sitoutumaton": {
+     "n": 529,
+     "x": -0.197,
+     "y": -0.154,
+     "x25": -0.375,
+     "x75": 0.0,
+     "y25": -0.438,
+     "y75": 0.125
+    },
+    "Kristallipuolue": {
+     "n": 88,
+     "x": -0.3,
+     "y": -0.049,
+     "x25": -0.5,
+     "x75": 0.0,
+     "y25": -0.328,
+     "y75": 0.188
+    },
+    "Suomen Kommunistinen Puolue": {
+     "n": 33,
+     "x": -0.83,
+     "y": -0.617,
+     "x25": -1.0,
+     "x75": -0.75,
+     "y25": -0.75,
+     "y75": -0.5
+    },
+    "Piraattipuolue": {
+     "n": 40,
+     "x": -0.344,
+     "y": -0.661,
+     "x25": -0.625,
+     "x75": -0.125,
+     "y25": -0.875,
+     "y75": -0.5
+    },
+    "Eläinoikeuspuolue": {
+     "n": 22,
+     "x": -0.614,
+     "y": -0.765,
+     "x25": -0.875,
+     "x75": -0.375,
+     "y25": -1.0,
+     "y75": -0.688
+    },
+    "Liberaalipuolue": {
+     "n": 25,
+     "x": 0.365,
+     "y": -0.405,
+     "x25": 0.125,
+     "x75": 0.5,
+     "y25": -0.688,
+     "y75": -0.188
+    },
+    "Sininen tulevaisuus": {
+     "n": 32,
+     "x": -0.16,
+     "y": 0.015,
+     "x25": -0.281,
+     "x75": 0.031,
+     "y25": -0.194,
+     "y75": 0.25
+    }
+   },
+   "defs": {
+    "economy": [
+     [
+      "Eniten ansaitsevat ihmiset voisivat maksaa enemmän kuntaveroa",
+      -1
+     ],
+     [
+      "Kun kunnan menoja ja tuloja tasapainotetaan, se on tehtävä mieluummin menoja karsimalla",
+      1
+     ],
+     [
+      "Kaikille vanhuksille on taattava oikeus palvelukotipaikkaan",
+      -1
+     ],
+     [
+      "Lähikirjastoja tarvitaan nykyistä vähemmän",
+      1
+     ]
+    ],
+    "values": [
+     [
+      "Kuntani pärjäisi hyvin ilman maahanmuuttoa",
+      1
+     ],
+     [
+      "Kuntani pitää edistää oleskeluluvan saaneiden turvapaikanhakijoiden kotoutumista",
+      -1
+     ],
+     [
+      "Kuntani pitää tarjota maksuton ehkäisy alle 25-vuotiaille",
+      -1
+     ],
+     [
+      "Kuntani pitää järjestää huumeidenkäyttäjille mahdollisuus vaihtaa",
+      -1
+     ],
+     [
+      "Koulun on pidettävä yllä kristillisiä perinteitä",
+      1
+     ],
+     [
+      "Politiikassa tarvitaan vahvoja johtajia",
+      1
+     ],
+     [
+      "Kuntani pitää järjestää liputus Pride-tapahtuman kunniaksi",
+      -1
+     ],
+     [
+      "Äänioikeuden ikäraja kuntavaaleissa pitäisi laskea 16 vuoteen",
+      -1
+     ]
+    ]
+   }
+  },
+  {
+   "key": "e2023",
+   "label": "Eduskuntavaalit 2023",
+   "short": "EK 2023",
+   "date": "2023-04",
+   "candidates": 2116,
+   "statements": {
+    "economy": [
+     {
+      "text": "Suomessa on liian helppo elää yhteiskunnan tukien varassa.",
+      "dir": 1
+     },
+     {
+      "text": "Kun valtion menoja ja tuloja tasapainotetaan, se on tehtävä mieluummin menoja vähentämällä kuin veroja korottamalla.",
+      "dir": 1
+     },
+     {
+      "text": "Valtion on mieluummin otettava lisää velkaa kuin vähennettävä palveluita.",
+      "dir": -1
+     },
+     {
+      "text": "Pääomatulojen verotusta on kiristettävä.",
+      "dir": -1
+     },
+     {
+      "text": "Palkoista pitäisi sopia ensisijaisesti työpaikoilla.",
+      "dir": 1
+     },
+     {
+      "text": "Ansiosidonnaisen työttömyysturvan kestoa pitää lyhentää.",
+      "dir": 1
+     },
+     {
+      "text": "Eläkeläisköyhyyttä pitää vähentää korottamalla takuueläkettä.",
+      "dir": -1
+     },
+     {
+      "text": "Sosiaali- ja terveyspalvelut on tuotettava ensisijaisesti julkisina palveluina.",
+      "dir": -1
+     },
+     {
+      "text": "Korkeakouluissa on otettava käyttöön lukukausimaksut myös suomalaisille opiskelijoille.",
+      "dir": 1
+     }
+    ],
+    "values": [
+     {
+      "text": "Suomen pitää ottaa käyttöön kolmas virallinen sukupuoli.",
+      "dir": -1
+     },
+     {
+      "text": "Kannabiksen käyttö pitää laillistaa.",
+      "dir": -1
+     },
+     {
+      "text": "Suomeen ei pidä avata huumeiden käyttöhuoneita.",
+      "dir": 1
+     },
+     {
+      "text": "Viinin myynti pitää sallia jatkossakin vain Alkossa.",
+      "dir": 1
+     },
+     {
+      "text": "Suomen pitää vastaanottaa nykyistä vähemmän kiintiöpakolaisia pakolaisleireiltä.",
+      "dir": 1
+     },
+     {
+      "text": "Työperäistä maahanmuuttoa tarvitaan suomalaisen hyvinvointiyhteiskunnan ylläpitämiseksi.",
+      "dir": -1
+     },
+     {
+      "text": "Suomen pitää pystyä karkottamaan nykyistä helpommin rikoksia tehneitä maahanmuuttajia.",
+      "dir": 1
+     }
+    ]
+   },
+   "parties": {
+    "Korjausliike": {
+     "n": 15,
+     "x": 0.552,
+     "y": 0.295,
+     "x25": 0.444,
+     "x75": 0.694,
+     "y25": 0.179,
+     "y75": 0.5
+    },
+    "VAS": {
+     "n": 211,
+     "x": -0.856,
+     "y": -0.493,
+     "x25": -0.944,
+     "x75": -0.778,
+     "y25": -0.714,
+     "y75": -0.286
+    },
+    "SDP": {
+     "n": 208,
+     "x": -0.604,
+     "y": -0.195,
+     "x25": -0.778,
+     "x75": -0.5,
+     "y25": -0.357,
+     "y75": 0.0
+    },
+    "Liberaalipuolue": {
+     "n": 85,
+     "x": 0.497,
+     "y": -0.457,
+     "x25": 0.333,
+     "x75": 0.667,
+     "y25": -0.643,
+     "y75": -0.357
+    },
+    "Suomen Kommunistinen Puolue": {
+     "n": 35,
+     "x": -0.821,
+     "y": -0.365,
+     "x25": -0.944,
+     "x75": -0.778,
+     "y25": -0.607,
+     "y75": -0.25
+    },
+    "VIHR": {
+     "n": 211,
+     "x": -0.429,
+     "y": -0.634,
+     "x25": -0.667,
+     "x75": -0.222,
+     "y25": -0.857,
+     "y75": -0.5
+    },
+    "Vapauden liitto": {
+     "n": 91,
+     "x": -0.042,
+     "y": 0.447,
+     "x25": -0.278,
+     "x75": 0.194,
+     "y25": 0.214,
+     "y75": 0.643
+    },
+    "Piraattipuolue": {
+     "n": 31,
+     "x": -0.355,
+     "y": -0.518,
+     "x25": -0.556,
+     "x75": -0.167,
+     "y25": -0.75,
+     "y75": -0.321
+    },
+    "Kristallipuolue": {
+     "n": 22,
+     "x": -0.129,
+     "y": 0.227,
+     "x25": -0.208,
+     "x75": 0.042,
+     "y25": 0.071,
+     "y75": 0.357
+    },
+    "KD": {
+     "n": 161,
+     "x": 0.031,
+     "y": 0.417,
+     "x25": -0.167,
+     "x75": 0.222,
+     "y25": 0.286,
+     "y75": 0.571
+    },
+    "LIIK": {
+     "n": 156,
+     "x": 0.262,
+     "y": 0.089,
+     "x25": 0.167,
+     "x75": 0.444,
+     "y25": -0.071,
+     "y75": 0.286
+    },
+    "Valta kuuluu kansalle": {
+     "n": 58,
+     "x": -0.1,
+     "y": 0.559,
+     "x25": -0.319,
+     "x75": 0.111,
+     "y25": 0.286,
+     "y75": 0.786
+    },
+    "RKP": {
+     "n": 105,
+     "x": -0.003,
+     "y": -0.351,
+     "x25": -0.167,
+     "x75": 0.167,
+     "y25": -0.571,
+     "y75": -0.143
+    },
+    "KOK": {
+     "n": 208,
+     "x": 0.423,
+     "y": -0.012,
+     "x25": 0.333,
+     "x75": 0.556,
+     "y25": -0.214,
+     "y75": 0.214
+    },
+    "PS": {
+     "n": 207,
+     "x": 0.141,
+     "y": 0.568,
+     "x25": -0.056,
+     "x75": 0.333,
+     "y25": 0.5,
+     "y75": 0.714
+    },
+    "Eläinoikeuspuolue": {
+     "n": 18,
+     "x": -0.793,
+     "y": -0.579,
+     "x25": -0.944,
+     "x75": -0.792,
+     "y25": -0.768,
+     "y75": -0.518
+    },
+    "KESK": {
+     "n": 193,
+     "x": 0.066,
+     "y": 0.152,
+     "x25": -0.056,
+     "x75": 0.222,
+     "y25": -0.071,
+     "y75": 0.357
+    },
+    "Sinimusta Liike": {
+     "n": 48,
+     "x": 0.101,
+     "y": 0.961,
+     "x25": 0.111,
+     "x75": 0.111,
+     "y25": 1.0,
+     "y75": 1.0
+    }
+   },
+   "defs": {
+    "economy": [
+     [
+      "Suomessa on liian helppo elää yhteiskunnan tukien varassa",
+      1
+     ],
+     [
+      "Kun valtion menoja ja tuloja tasapainotetaan, se on tehtävä mieluummin menoja vähentämällä",
+      1
+     ],
+     [
+      "Valtion on mieluummin otettava lisää velkaa kuin vähennettävä palveluita",
+      -1
+     ],
+     [
+      "Pääomatulojen verotusta on kiristettävä",
+      -1
+     ],
+     [
+      "Palkoista pitäisi sopia ensisijaisesti työpaikoilla",
+      1
+     ],
+     [
+      "Ansiosidonnaisen työttömyysturvan kestoa pitää lyhentää",
+      1
+     ],
+     [
+      "Eläkeläisköyhyyttä pitää vähentää korottamalla takuueläkettä",
+      -1
+     ],
+     [
+      "Sosiaali- ja terveyspalvelut on tuotettava ensisijaisesti julkisina palveluina",
+      -1
+     ],
+     [
+      "Korkeakouluissa on otettava käyttöön lukukausimaksut",
+      1
+     ]
+    ],
+    "values": [
+     [
+      "Suomen pitää ottaa käyttöön kolmas virallinen sukupuoli",
+      -1
+     ],
+     [
+      "Kannabiksen käyttö pitää laillistaa",
+      -1
+     ],
+     [
+      "Suomeen ei pidä avata huumeiden käyttöhuoneita",
+      1
+     ],
+     [
+      "Viinin myynti pitää sallia jatkossakin vain Alkossa",
+      1
+     ],
+     [
+      "Suomen pitää vastaanottaa nykyistä vähemmän kiintiöpakolaisia",
+      1
+     ],
+     [
+      "Työperäistä maahanmuuttoa tarvitaan",
+      -1
+     ],
+     [
+      "Suomen pitää pystyä karkottamaan nykyistä helpommin rikoksia tehneitä",
+      1
+     ]
+    ]
+   }
+  },
+  {
+   "key": "a2025",
+   "label": "Alue- ja kuntavaalit 2025",
+   "short": "AV 2025",
+   "date": "2025-04",
+   "candidates": 6928,
+   "statements": {
+    "economy": [
+     {
+      "text": "Julkisen terveydenhuollon asiakasmaksuja pitäisi alentaa.",
+      "dir": -1
+     },
+     {
+      "text": "On oikein, että julkisella rahalla tuetaan ihmisten käymistä yksityisessä terveydenhuollossa.",
+      "dir": 1
+     },
+     {
+      "text": "Vanhusten ympärivuorokautiseen palveluasumiseen pitää lisätä paikkoja, vaikka se toisi kustannuksia.",
+      "dir": -1
+     },
+     {
+      "text": "Jos kunnan tuloja ja menoja tasapainotetaan, se on tehtävä mieluummin menoja leikkaamalla kuin veroja korottamalla.",
+      "dir": 1
+     },
+     {
+      "text": "Pääomatulot on pidettävä kunnallisverotuksen ulkopuolella.",
+      "dir": 1
+     },
+     {
+      "text": "Kunnan on ostettava ensisijaisesti palveluita omistamiltaan yhtiöiltä.",
+      "dir": -1
+     },
+     {
+      "text": "Hyvinvointialueiden pitää tehdä säästöt vaaditussa ajassa, vaikka palveluita jouduttaisiin karsimaan nopeasti.",
+      "dir": 1
+     },
+     {
+      "text": "Kirjastoja pitäisi muuttaa itsepalvelukirjastoiksi, jotta kuntani voi säästää henkilöstön palkkakuluista.",
+      "dir": 1
+     }
+    ],
+    "values": [
+     {
+      "text": "Hyvinvointialueeni on tarjottava paperittomille ihmisille myös sellaista terveydenhoitoa, jota laki ei vaadi.",
+      "dir": -1
+     },
+     {
+      "text": "Hyvinvointialueen pitäisi luopua nuorten maksuttomasta ehkäisystä.",
+      "dir": 1
+     },
+     {
+      "text": "Hyvinvointialueeni pitää järjestää koulutusta seksuaalisen suuntautumisen ja sukupuolen moninaisuudesta sosiaali- ja terveydenhuollon työntekijöille.",
+      "dir": -1
+     },
+     {
+      "text": "Huumeidenkäyttäjillä pitää olla mahdollisuus vaihtaa likaiset neulat puhtaisiin kaikissa hyvinvointialueeni kunnissa.",
+      "dir": -1
+     },
+     {
+      "text": "Koulun on pidettävä yllä kristillisiä perinteitä.",
+      "dir": 1
+     },
+     {
+      "text": "Maahanmuuttajat vahvistavat kotikuntani elinvoimaa.",
+      "dir": -1
+     },
+     {
+      "text": "Kuntani pitää kieltäytyä vastaanottamasta kiintiöpakolaisia.",
+      "dir": 1
+     },
+     {
+      "text": "Kuntani pitää rahoittaa tapahtumia, jotka lisäävät erilaisten kulttuurien vuorovaikutusta.",
+      "dir": -1
+     },
+     {
+      "text": "Kuntani pitää säästää maahanmuuttajien kotouttamisen palveluista.",
+      "dir": 1
+     },
+     {
+      "text": "Kotikuntani olisi hyvä osoittaa tukensa sukupuoli- ja seksuaalivähemmistöille Pride-liputuksella.",
+      "dir": -1
+     }
+    ]
+   },
+   "parties": {
+    "SDP": {
+     "n": 1146,
+     "x": -0.44,
+     "y": -0.51,
+     "x25": -0.625,
+     "x75": -0.312,
+     "y25": -0.75,
+     "y75": -0.3
+    },
+    "VAS": {
+     "n": 904,
+     "x": -0.694,
+     "y": -0.78,
+     "x25": -0.875,
+     "x75": -0.562,
+     "y25": -0.95,
+     "y75": -0.688
+    },
+    "LIIK": {
+     "n": 74,
+     "x": -0.033,
+     "y": -0.088,
+     "x25": -0.25,
+     "x75": 0.125,
+     "y25": -0.337,
+     "y75": 0.05
+    },
+    "KOK": {
+     "n": 1190,
+     "x": 0.235,
+     "y": -0.164,
+     "x25": 0.062,
+     "x75": 0.438,
+     "y25": -0.4,
+     "y75": 0.05
+    },
+    "RKP": {
+     "n": 209,
+     "x": -0.083,
+     "y": -0.535,
+     "x25": -0.25,
+     "x75": 0.062,
+     "y25": -0.75,
+     "y75": -0.4
+    },
+    "VIHR": {
+     "n": 834,
+     "x": -0.405,
+     "y": -0.774,
+     "x25": -0.562,
+     "x75": -0.25,
+     "y25": -0.95,
+     "y75": -0.65
+    },
+    "KD": {
+     "n": 489,
+     "x": -0.064,
+     "y": 0.115,
+     "x25": -0.25,
+     "x75": 0.125,
+     "y25": -0.1,
+     "y75": 0.3
+    },
+    "PS": {
+     "n": 949,
+     "x": 0.008,
+     "y": 0.518,
+     "x25": -0.188,
+     "x75": 0.188,
+     "y25": 0.35,
+     "y75": 0.75
+    },
+    "KESK": {
+     "n": 924,
+     "x": -0.128,
+     "y": -0.178,
+     "x25": -0.25,
+     "x75": 0.0,
+     "y25": -0.4,
+     "y75": 0.05
+    },
+    "Vapauden liitto": {
+     "n": 59,
+     "x": -0.219,
+     "y": 0.534,
+     "x25": -0.375,
+     "x75": -0.062,
+     "y25": 0.375,
+     "y75": 0.775
+    },
+    "Suomen Kommunistinen Puolue": {
+     "n": 22,
+     "x": -0.815,
+     "y": -0.9,
+     "x25": -1.0,
+     "x75": -0.812,
+     "y25": -1.0,
+     "y75": -0.9
+    },
+    "Liberaalipuolue": {
+     "n": 53,
+     "x": 0.218,
+     "y": -0.275,
+     "x25": 0.0,
+     "x75": 0.5,
+     "y25": -0.6,
+     "y75": -0.15
+    }
+   },
+   "defs": {
+    "economy": [
+     [
+      "Julkisen terveydenhuollon asiakasmaksuja pitäisi alentaa",
+      -1
+     ],
+     [
+      "On oikein, että julkisella rahalla tuetaan ihmisten käymistä yksityisessä terveydenhuollossa",
+      1
+     ],
+     [
+      "Vanhusten ympärivuorokautiseen palveluasumiseen pitää lisätä paikkoja",
+      -1
+     ],
+     [
+      "Jos kunnan tuloja ja menoja tasapainotetaan, se on tehtävä mieluummin menoja leikkaamalla",
+      1
+     ],
+     [
+      "Pääomatulot on pidettävä kunnallisverotuksen ulkopuolella",
+      1
+     ],
+     [
+      "Kunnan on ostettava ensisijaisesti palveluita omistamiltaan yhtiöiltä",
+      -1
+     ],
+     [
+      "Hyvinvointialueiden pitää tehdä säästöt vaaditussa ajassa",
+      1
+     ],
+     [
+      "Kirjastoja pitäisi muuttaa itsepalvelukirjastoiksi",
+      1
+     ]
+    ],
+    "values": [
+     [
+      "Hyvinvointialueeni on tarjottava paperittomille ihmisille",
+      -1
+     ],
+     [
+      "Hyvinvointialueen pitäisi luopua nuorten maksuttomasta ehkäisystä",
+      1
+     ],
+     [
+      "Hyvinvointialueeni pitää järjestää koulutusta seksuaalisen suuntautumisen",
+      -1
+     ],
+     [
+      "Huumeidenkäyttäjillä pitää olla mahdollisuus vaihtaa likaiset neulat",
+      -1
+     ],
+     [
+      "Koulun on pidettävä yllä kristillisiä perinteitä",
+      1
+     ],
+     [
+      "Maahanmuuttajat vahvistavat kotikuntani elinvoimaa",
+      -1
+     ],
+     [
+      "Kuntani pitää kieltäytyä vastaanottamasta kiintiöpakolaisia",
+      1
+     ],
+     [
+      "Kuntani pitää rahoittaa tapahtumia, jotka lisäävät erilaisten kulttuurien",
+      -1
+     ],
+     [
+      "Kuntani pitää säästää maahanmuuttajien kotouttamisen palveluista",
+      1
+     ],
+     [
+      "Kotikuntani olisi hyvä osoittaa tukensa sukupuoli- ja seksuaalivähemmistöille",
+      -1
+     ]
+    ]
+   }
+  }
+ ]
+}

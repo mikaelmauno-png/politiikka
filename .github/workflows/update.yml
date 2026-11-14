@@ -42,6 +42,10 @@ jobs:
         id: economy
         run: python scripts/fetch_economy.py
         continue-on-error: true
+      - name: Election compass (Yle; only downloads when an election is missing)
+        id: vaalikone
+        run: python scripts/fetch_vaalikone.py
+        continue-on-error: true
       - name: Build site data
         run: python scripts/build.py
       - name: Commit
@@ -62,5 +66,6 @@ jobs:
           [ "${{ steps.votes.outcome }}" = failure ] && failed="$failed votes"
           [ "${{ steps.initiatives.outcome }}" = failure ] && failed="$failed initiatives"
           [ "${{ steps.economy.outcome }}" = failure ] && failed="$failed economy"
+          [ "${{ steps.vaalikone.outcome }}" = failure ] && failed="$failed vaalikone"
           if [ -n "$failed" ]; then echo "::error::Failed sources:$failed"; exit 1; fi
           echo "All sources OK"
