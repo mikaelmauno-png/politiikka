@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="fi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Politiikkatilanne</title>
+<meta name="description" content="Suomen poliittinen tilanne avoimista tilastoista: kannatus, eduskunnan äänestykset, nelikenttä, kansalaisaloitteet ja historia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%23111'/%3E%3Crect x='3' y='3' width='4' height='4' fill='%23fff'/%3E%3Crect x='9' y='3' width='4' height='4' fill='%23fff'/%3E%3Crect x='3' y='9' width='4' height='4' fill='%23fff'/%3E%3Crect x='9' y='9' width='4' height='4' fill='%232e6b3f'/%3E%3C/svg%3E">
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#tilanne"><span class="logo"><i></i><i></i><i></i><i></i></span><span class="name">Politiikkatilanne</span></a>
+    <nav class="sections">
+      <a href="#tilanne">Tilanne</a>
+      <a href="#kannatus">Kannatus</a>
+      <a href="#paikat">Paikkaennuste</a>
+      <a href="#eduskunta">Eduskunta</a>
+      <a href="#nelikentta">Nelikenttä</a>
+      <a href="#kansalaiset">Kansalaiset</a>
+      <a href="#historia">Historia</a>
+      <a href="#menetelma">Menetelmä</a>
+    </nav>
+    <button class="theme-btn" id="themeBtn" title="Vaihda teema" aria-label="Vaihda teema">◐</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- HERO -->
+  <section id="tilanne" class="hero">
+    <div>
+      <div class="kicker">Hallituspuolueiden kannatusvaihe</div>
+      <div class="phase-big"><span class="word" id="heroWord">…</span><span class="since" id="heroSince"></span></div>
+      <div class="phase-sub" id="heroSub"></div>
+      <div class="phase-rows" id="phaseRows"></div>
+      <div class="legend-note">Vaihe = kannatus suhteessa vuoden 2023 vaalitulokseen (taso) ja kolmen kuukauden muutokseen (suunta).</div>
+    </div>
+    <div class="tiles" id="heroTiles"></div>
+  </section>
+
+  <!-- SUPPORT MAP -->
+  <section id="kannatus" class="block">
+    <div class="section-head"><h2>Kannatuskartta</h2><span class="meta" id="pollMeta"></span></div>
+    <div class="grid2">
+      <div>
+        <div class="panel-title">
+          <span>Taso ↑ · muutos → <span class="meta">%-yks.</span></span>
+          <div class="player">
+            <button id="mapPlay" aria-label="Toista">▶</button>
+            <input type="range" id="mapSlider" min="0" max="0" value="0" aria-label="Ajankohta">
+            <span class="when" id="mapWhen"></span>
+          </div>
+        </div>
+        <div class="chart" id="mapChart"></div>
+        <div class="legend-note">Pisteen häntä näyttää kuuden edellisen kuukauden kulun. Taso = kannatus − vaalitulos 2023; muutos = kolmen kuukauden muutos (3 kk liukuva keskiarvo).</div>
+      </div>
+      <div>
+        <div class="panel-title"><span>Puolueet</span><span class="meta">kannatus · ero vaaleihin · vaihe 12 kk</span></div>
+        <table class="plist" id="partyList"></table>
+      </div>
+    </div>
+
+    <div style="margin-top:36px">
+      <div class="panel-title"><span>Kannatus kuukausittain</span>
+        <div class="seg" id="lineMode"><button data-m="parties" class="on">Puolueet</button><button data-m="blocs">Hallitus / oppositio</button></div>
+      </div>
+      <div class="legend" id="lineLegend"></div>
+      <div class="chart" id="lineChart"></div>
+      <details class="tableview"><summary>Viimeisimmät mittaukset taulukkona</summary><div class="scroll-x" id="pollTable"></div></details>
+    </div>
+  </section>
+
+  <!-- SEATS -->
+  <section id="paikat" class="block">
+    <div class="section-head"><h2>Paikkaennuste</h2><span class="meta" id="seatMeta"></span></div>
+    <p class="lede">Viimeisimpien mittausten keskiarvo muunnettuna paikoiksi: kunkin puolueen vuoden 2023 äänet vaalipiireittäin skaalataan kannatusmuutoksella ja paikat jaetaan d'Hondtin menetelmällä. Vaaliliittoja ja ehdokasasettelua ei mallinneta.</p>
+    <div class="seatwrap"><div class="maj"><span>enemmistö 101</span></div><div class="seatbar" id="seatBar"></div></div>
+    <div class="legend" id="seatLegend" style="margin-top:12px"></div>
+    <div class="scroll-x" style="margin-top:12px"><table class="data" id="seatTable"></table></div>
+  </section>
+
+  <!-- PARLIAMENT -->
+  <section id="eduskunta" class="block">
+    <div class="section-head"><h2>Eduskunnan äänestykset</h2><span class="meta" id="parlMeta"></span></div>
+    <div id="parlBody"></div>
+  </section>
+
+  <!-- COMPASS -->
+  <section id="nelikentta" class="block">
+    <div class="section-head"><h2>Nelikenttä äänestyskäyttäytymisestä</h2><span class="meta" id="compassMeta"></span></div>
+    <p class="lede">Kansanedustajat sijoitetaan kartalle sen mukaan, kuinka usein he äänestävät samoin kuin muut (moniulotteinen skaalaus kiistanalaisista äänestyksistä). Lähekkäin olevat äänestävät samalla tavalla. Akseleita ei ole nimetty etukäteen: Suomessa ensimmäinen ulottuvuus erottaa käytännössä hallituksen ja opposition.</p>
+    <div id="compassBody"></div>
+  </section>
+
+  <!-- CITIZENS -->
+  <section id="kansalaiset" class="block">
+    <div class="section-head"><h2>Kansalaisaloitteet</h2><span class="meta">kansalaisaloite.fi</span></div>
+    <div id="iniBody"></div>
+  </section>
+
+  <!-- HISTORY -->
+  <section id="historia" class="block">
+    <div class="section-head"><h2>Historia</h2><span class="meta">eduskuntavaalit 1983–2023</span></div>
+    <div class="grid2">
+      <div>
+        <div class="panel-title"><span>Puolueiden kannatus eduskuntavaaleissa</span><span class="meta">% äänistä</span></div>
+        <div class="legend" id="histLegend"></div>
+        <div class="chart" id="histChart"></div>
+      </div>
+      <div>
+        <div class="panel-title"><span>Hallitukset</span></div>
+        <div class="govs" id="govList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- METHOD -->
+  <section id="menetelma" class="block">
+    <div class="section-head"><h2>Menetelmä ja lähteet</h2><span class="meta" id="updated"></span></div>
+    <div class="prose">
+      <h3>Kannatusvaihe</h3>
+      <p>Kuukauden kannatus on kunkin tutkimuslaitoksen kuukauden viimeisimmän mittauksen keskiarvo. Siitä lasketaan kolmen kuukauden liukuva keskiarvo. <b>Taso</b> on liukuvan keskiarvon ero vuoden 2023 eduskuntavaalitulokseen ja <b>muutos</b> liukuvan keskiarvon muutos kolmessa kuukaudessa. Vaiheet: <span class="chip nousu">Nousu</span> taso ≥ 0 ja kasvaa, <span class="chip hidastuminen">Hidastuminen</span> taso ≥ 0 ja laskee, <span class="chip lasku">Lasku</span> taso &lt; 0 ja laskee, <span class="chip elpyminen">Elpyminen</span> taso &lt; 0 ja kasvaa.</p>
+      <h3>Eduskunta</h3>
+      <p>Mukana ovat vaalikauden 2023– täysistuntojen nimenhuutoäänestykset (mitätöidyt pois). Puolueen linja on ryhmän jaa- ja ei-äänten enemmistö. <b>Yhtenäisyys</b> on Hixin yksimielisyysindeksi (100 = kaikki läsnäolijat äänestivät samoin) laskettuna kiistanalaisista äänestyksistä, joissa vähemmistö on vähintään 10 %. <b>Poikkeava ääni</b> on jaa- tai ei-ääni oman ryhmän linjaa vastaan. <b>Hallituksen tappio</b> on äänestys, jossa hallitusryhmien yhteenlaskettu enemmistö hävisi. Kaikki tappiot eivät ole poliittisesti merkittäviä (esim. lausumaehdotukset).</p>
+      <h3>Nelikenttä</h3>
+      <p>Kahden edustajan etäisyys = osuus yhteisistä jaa/ei-äänestyksistä, joissa he äänestivät eri tavoin. Mukana vain äänestykset, joissa vähemmistö on vähintään 10 %, ja edustajat, jotka ovat äänestäneet vähintään 25 %:ssa niistä. Etäisyyksistä lasketaan kaksiulotteinen klassinen moniulotteinen skaalaus; liukuvat 12 kuukauden kartat kierretään koko vaalikauden kartan suuntaan (Procrustes). Akselit ovat tilastollisia, eivät vasemmisto–oikeisto- tai liberaali–konservatiivi-asteikkoja.</p>
+      <h3>Lähteet</h3>
+      <ul>
+        <li>Mielipidemittaukset: Yle/Taloustutkimus, HS/Verian ym., koottuna Wikipedian taulukosta <a id="pollSrc" href="#">Opinion polling for the 2027 Finnish parliamentary election</a>.</li>
+        <li>Vaalitulokset ja paikat: Tilastokeskus, StatFin (eduskuntavaalit).</li>
+        <li>Äänestykset: Eduskunnan avoin data (avoindata.eduskunta.fi).</li>
+        <li>Kansalaisaloitteet: kansalaisaloite.fi API.</li>
+      </ul>
+      <p>Luvut haetaan automaattisesti kerran vuorokaudessa. Laskelmat ja esitystapa ovat omia; mittauksilla on virhemarginaali (noin ±1–2 %-yks.).</p>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap">Politiikkatilanne · avoimista tilastoista · <span id="footUpdated"></span></div></footer>
+<div class="tip" id="tip"></div>
+<script src="app.js"></script>
+</body>
+</html>
