@@ -4,6 +4,7 @@ import json
 import math
 import os
 from collections import defaultdict
+from zoneinfo import ZoneInfo
 
 from common import CACHE, DATA, GOVERNMENT, PARTIES, read_json, write_json
 
@@ -429,7 +430,7 @@ def main():
     mps = read_json(f"{CACHE}/mps.json", {})
     votes = load_votes()
     site = {
-        "updated": datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+        "updated": datetime.datetime.now(ZoneInfo("Europe/Helsinki")).strftime("%Y-%m-%d %H:%M"),
         "parties": PARTIES, "government": GOVERNMENT, "opposition": OPPOSITION,
         "polls": polls,
         "seats": build_seats(elections, polls["latest"]),
