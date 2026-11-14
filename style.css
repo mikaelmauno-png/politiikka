@@ -123,7 +123,7 @@ section.block { padding: 40px 0 8px; }
 .tile .t { font-size: 12px; color: var(--ink-2); }
 .tile .v { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; margin-top: 2px; }
 .tile .s { font-size: 12px; color: var(--ink-3); }
-.tile .v small { font-size: 15px; font-weight: 500; color: var(--ink-2); }
+.tile .v small { font-size: 15px; font-weight: 500; color: var(--ink-2); white-space: nowrap; }
 
 /* two column layout */
 .grid2 { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 32px; }
@@ -226,6 +226,10 @@ footer { border-top: 1px solid var(--rule); margin-top: 48px; padding: 20px 0 40
   header.top .wrap { gap: 12px; }
   .brand span.name { display: none; }
   .phase-big .word { font-size: 46px; }
+  .tiles { gap: 8px; }
+  .tile { padding: 12px; }
+  .tile .v { font-size: 24px; }
+  .tile .v small { font-size: 13px; }
   .phase-rows { grid-template-columns: 100px 1fr auto; }
   .player input[type=range] { width: 110px; }
   .strip { gap: 1px; }
