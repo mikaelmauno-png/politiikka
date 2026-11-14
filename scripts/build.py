@@ -354,6 +354,32 @@ def procrustes(src, ref):
     return best[1]
 
 
+def defining_votes(votes, pts, dim, k=6):
+    """Votes that best separate the two ends of a compass axis (point-biserial r of jaa/ei vs position)."""
+    best = {}
+    for v in votes:
+        xs = [(pts[hn][dim], 1 if code == "J" else 0) for hn, _, code in v["ballots"]
+              if code in "JE" and hn in pts]
+        n = len(xs)
+        j = sum(c for _, c in xs)
+        if n < 50 or min(j, n - j) < 0.10 * n:
+            continue
+        m1 = sum(x for x, c in xs if c) / j
+        m0 = sum(x for x, c in xs if not c) / (n - j)
+        mean = sum(x for x, _ in xs) / n
+        sd = math.sqrt(sum((x - mean) ** 2 for x, _ in xs) / n) or 1e-9
+        r = (m1 - m0) / sd * math.sqrt(j * (n - j)) / n
+        key = (v["item"] or v["title"]).strip().lower()
+        if key not in best or abs(r) > abs(best[key]["r"]):
+            best[key] = {"item": v["item"] or v["title"], "title": v["title"], "t": v["t"], "doc": v["doc"],
+                         "r": r, "res": v["res"][:2]}
+    top = sorted(best.values(), key=lambda x: -abs(x["r"]))[:k]
+    for x in top:
+        x["high"] = "J" if x["r"] > 0 else "E"  # how the high (right / top) end voted
+        x["r"] = r1(x["r"], 2)
+    return top
+
+
 def build_compass(votes, mps):
     if not votes:
         return None
@@ -394,7 +420,8 @@ def build_compass(votes, mps):
     return {"full": {"votes": n_full,
                      "parties": {p: [r1(c, 3) for c in party_mean(pts, p)] for p in PARTIES if party_mean(pts, p)},
                      "mps": [[hn, mps.get(hn, hn), party_of[hn], r1(x, 3), r1(y, 3)] for hn, (x, y) in pts.items()]},
-            "frames": frames, "explained": [r1(l1, 3), r1(l2, 3)]}
+            "frames": frames, "explained": [r1(l1, 3), r1(l2, 3)],
+            "defining": [defining_votes(votes, pts, 0), defining_votes(votes, pts, 1)]}
 
 
 # ---------------------------------------------------------------- initiatives
@@ -434,10 +461,12 @@ def main():
         "parties": PARTIES, "government": GOVERNMENT, "opposition": OPPOSITION,
         "polls": polls,
         "seats": build_seats(elections, polls["latest"]),
-        "history": {"national": elections["national"], "governments": GOVERNMENTS},
+        "history": {"national": elections["national"], "governments": GOVERNMENTS,
+                    "allParties": elections.get("allParties", {})},
         "parliament": build_parliament(votes, mps) if votes else None,
         "compass": build_compass(votes, mps),
         "initiatives": build_initiatives(read_json(f"{CACHE}/initiatives.json", []), today),
+        "economy": read_json(f"{CACHE}/economy.json"),
         "nextElection": "2027-04-18",
     }
     write_json(f"{DATA}/site.json", site)

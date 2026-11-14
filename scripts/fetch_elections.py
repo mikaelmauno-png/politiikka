@@ -65,6 +65,22 @@ def main():
                            "aanestysalue_26_20230101": ["VP%02d" % i for i in range(1, 14)]})
     seats = {pos["aanestysalue_26_20230101"]: int(val) for pos, val in cells(js)}
 
+    # Every party that has fielded candidates since 1983 (national votes and share)
+    party_var = var["puolue_19_20230101"]
+    names = dict(zip(party_var["values"], party_var["valueTexts"]))
+    codes = [c for c in party_var["values"] if c != "SSS"]
+    js = query("13sw.px", {"timeperiod_y": years, "sukupuoli_9_20180101": ["SSS"],
+                           "puolue_19_20230101": codes, "kunta_109_20230101": ["SSS"],
+                           "contentscode": ["evaa_aanet", "evaa_osuus_aanista"]})
+    all_parties = {}
+    for pos, val in cells(js):
+        if not val:
+            continue
+        c = pos["puolue_19_20230101"]
+        rec = all_parties.setdefault(c, {"abbr": CODE2PARTY.get(c, names[c]), "votes": {}, "share": {}})
+        key = "votes" if pos["contentscode"] == "evaa_aanet" else "share"
+        rec[key][pos["timeperiod_y"]] = val
+
     out = {}
     for code, text in districts:
         vp = text.split()[0]
@@ -72,9 +88,11 @@ def main():
             continue
         out[vp] = {"name": text.split(" ", 1)[1].replace(" vaalipiiri", ""),
                    "seats": seats.get(vp), "votes": dvotes[code]}
-    write_json(f"{CACHE}/elections.json", {"national": national, "districts": out}, compact=False)
+    write_json(f"{CACHE}/elections.json", {"national": national, "districts": out,
+                                           "allParties": all_parties}, compact=False)
     print("years", sorted(national), "seat total", sum(seats.values()))
     print("2023", national.get("2023"))
+    print("all parties", len(all_parties))
 
 
 if __name__ == "__main__":

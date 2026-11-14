@@ -103,17 +103,30 @@
 
   <!-- HISTORY -->
   <section id="historia" class="block">
-    <div class="section-head"><h2>Historia</h2><span class="meta">eduskuntavaalit 1983–2023</span></div>
+    <div class="section-head"><h2>Historia</h2><span class="meta">talous 1985– · eduskuntavaalit 1983–2023</span></div>
+    <div style="margin-bottom:36px">
+      <div class="panel-title"><span>Talous ja hallitukset</span>
+        <div class="seg" id="econMode"><button data-m="esi" class="on">Luottamus</button><button data-m="unemployment">Työttömyys</button></div></div>
+      <div class="chart" id="econChart"></div>
+      <div class="legend-note" id="econNote"></div>
+    </div>
     <div class="grid2">
       <div>
-        <div class="panel-title"><span>Puolueiden kannatus eduskuntavaaleissa</span><span class="meta">% äänistä</span></div>
+        <div class="panel-title"><span>Puolueiden kannatus eduskuntavaaleissa ja hallitukset</span><span class="meta">% äänistä</span></div>
         <div class="legend" id="histLegend"></div>
         <div class="chart" id="histChart"></div>
+        <div class="legend-note">Taustan jaksot ovat hallituksia; yläreunan väri = pääministeripuolue. Katkoviiva päättyy nykyisten mittausten keskiarvoon.</div>
       </div>
       <div>
         <div class="panel-title"><span>Hallitukset</span></div>
         <div class="govs" id="govList"></div>
       </div>
+    </div>
+    <div style="margin-top:36px">
+      <div class="panel-title"><span>Kaikki ehdokkaita asettaneet puolueet</span>
+        <div class="seg" id="allMode"><button data-m="share" class="on">% äänistä</button><button data-m="votes">Äänet</button></div></div>
+      <div class="scroll-x"><table class="data sticky1" id="allParties"></table></div>
+      <div class="legend-note">Koko maan tulos eduskuntavaaleissa. Tilastokeskus yhdistää puolueen edeltäjät seuraajiin (esim. SMP → PS, SKDL → VAS); suluissa oleva vuosi on puolueen viimeiset vaalit. "Muu puolue" kokoaa vanhempia pienpuolueita, "Muut" valitsijayhdistykset ja muut. Lyhenteet Tilastokeskuksen luokituksesta.</div>
     </div>
   </section>
 
@@ -126,13 +139,14 @@
       <h3>Eduskunta</h3>
       <p>Mukana ovat vaalikauden 2023– täysistuntojen nimenhuutoäänestykset (mitätöidyt pois). Puolueen linja on ryhmän jaa- ja ei-äänten enemmistö. <b>Yhtenäisyys</b> on Hixin yksimielisyysindeksi (100 = kaikki läsnäolijat äänestivät samoin) laskettuna kiistanalaisista äänestyksistä, joissa vähemmistö on vähintään 10 %. <b>Poikkeava ääni</b> on jaa- tai ei-ääni oman ryhmän linjaa vastaan. <b>Hallituksen tappio</b> on äänestys, jossa hallitusryhmien yhteenlaskettu enemmistö hävisi. Kaikki tappiot eivät ole poliittisesti merkittäviä (esim. lausumaehdotukset).</p>
       <h3>Nelikenttä</h3>
-      <p>Kahden edustajan etäisyys = osuus yhteisistä jaa/ei-äänestyksistä, joissa he äänestivät eri tavoin. Mukana vain äänestykset, joissa vähemmistö on vähintään 10 %, ja edustajat, jotka ovat äänestäneet vähintään 25 %:ssa niistä. Etäisyyksistä lasketaan kaksiulotteinen klassinen moniulotteinen skaalaus; liukuvat 12 kuukauden kartat kierretään koko vaalikauden kartan suuntaan (Procrustes). Akselit ovat tilastollisia, eivät vasemmisto–oikeisto- tai liberaali–konservatiivi-asteikkoja.</p>
+      <p>Kahden edustajan etäisyys = osuus yhteisistä jaa/ei-äänestyksistä, joissa he äänestivät eri tavoin. Mukana vain äänestykset, joissa vähemmistö on vähintään 10 %, ja edustajat, jotka ovat äänestäneet vähintään 25 %:ssa niistä. Etäisyyksistä lasketaan kaksiulotteinen klassinen moniulotteinen skaalaus; liukuvat 12 kuukauden kartat kierretään koko vaalikauden kartan suuntaan (Procrustes). Akselit ovat tilastollisia, eivät vasemmisto–oikeisto- tai liberaali–konservatiivi-asteikkoja. Akselin tulkinnan tueksi näytetään äänestykset, joissa jaa/ei-ääni korreloi vahvimmin edustajan sijainnin kanssa akselilla (point-biserial-korrelaatio); samaa asiaa koskevista äänestyksistä näytetään vain vahvin.</p>
       <h3>Lähteet</h3>
       <ul>
         <li>Mielipidemittaukset: Yle/Taloustutkimus, HS/Verian ym., koottuna Wikipedian taulukosta <a id="pollSrc" href="#">Opinion polling for the 2027 Finnish parliamentary election</a>.</li>
         <li>Vaalitulokset ja paikat: Tilastokeskus, StatFin (eduskuntavaalit).</li>
         <li>Äänestykset: Eduskunnan avoin data (avoindata.eduskunta.fi).</li>
         <li>Kansalaisaloitteet: kansalaisaloite.fi API.</li>
+        <li>Talous: Eurostat – Euroopan komission luottamusindikaattori (Economic Sentiment Indicator, ei_bssi_m_r2) ja työttömyysasteen trendi (une_rt_m).</li>
       </ul>
       <p>Luvut haetaan automaattisesti kerran vuorokaudessa. Laskelmat ja esitystapa ovat omia; mittauksilla on virhemarginaali (noin ±1–2 %-yks.).</p>
     </div>

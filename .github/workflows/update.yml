@@ -38,6 +38,10 @@ jobs:
         id: initiatives
         run: python scripts/fetch_initiatives.py
         continue-on-error: true
+      - name: Economy (Eurostat)
+        id: economy
+        run: python scripts/fetch_economy.py
+        continue-on-error: true
       - name: Build site data
         run: python scripts/build.py
       - name: Commit
@@ -57,5 +61,6 @@ jobs:
           [ "${{ steps.elections.outcome }}" = failure ] && failed="$failed elections"
           [ "${{ steps.votes.outcome }}" = failure ] && failed="$failed votes"
           [ "${{ steps.initiatives.outcome }}" = failure ] && failed="$failed initiatives"
+          [ "${{ steps.economy.outcome }}" = failure ] && failed="$failed economy"
           if [ -n "$failed" ]; then echo "::error::Failed sources:$failed"; exit 1; fi
           echo "All sources OK"

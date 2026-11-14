@@ -127,7 +127,7 @@ section.block { padding: 40px 0 8px; }
 
 /* two column layout */
 .grid2 { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 32px; }
-.panel-title { display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: 15px; margin-bottom: 8px; gap: 8px; }
+.panel-title { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; font-weight: 600; font-size: 15px; margin-bottom: 8px; gap: 8px; }
 .panel-title .meta { font-weight: 400; color: var(--ink-3); font-size: 13px; }
 
 /* time controls */
@@ -236,3 +236,9 @@ footer { border-top: 1px solid var(--rule); margin-top: 48px; padding: 20px 0 40
   .strip i { width: 6px; }
   .plist td { padding: 7px 2px; }
 }
+
+table.sticky1 td:first-child, table.sticky1 th:first-child { position: sticky; left: 0; background: var(--bg); z-index: 1; }
+table.data td.dim { color: var(--ink-3); }
+.fullname { color: var(--ink-3); }
+@media (max-width: 600px) { .fullname { display: none; } }
+@media (max-width: 380px) { .strip i:nth-child(-n+6) { display: none; } }

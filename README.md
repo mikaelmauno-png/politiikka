@@ -9,7 +9,7 @@ Staattinen sivu (`index.html`, `app.js`, `style.css`), joka lukee yhden tiedosto
 - **Paikkaennuste**: mittausten keskiarvo → vaalipiirikohtainen d'Hondt
 - **Eduskunta**: ryhmien yhtenäisyys, läsnäolo, hallituksen tappiot, ryhmien samanlaisuus, linjasta poikkeajat
 - **Nelikenttä**: edustajien sijainti äänestyskäyttäytymisen perusteella (MDS), kausittain
-- **Kansalaisaloitteet** ja **historia** (vaalitulokset 1983–2023, hallitukset)
+- **Kansalaisaloitteet** ja **historia** (talous ja hallitukset 1985–, vaalitulokset 1983–2023, hallitukset)
 
 ## Data
 | Skripti | Lähde | Välimuisti |
@@ -18,6 +18,7 @@ Staattinen sivu (`index.html`, `app.js`, `style.css`), joka lukee yhden tiedosto
 | `scripts/fetch_elections.py` | Tilastokeskus StatFin | `data/cache/elections.json` |
 | `scripts/fetch_votes.py` | Eduskunnan avoin data (inkrementaalinen) | `data/cache/votes.jsonl`, `mps.json` |
 | `scripts/fetch_initiatives.py` | kansalaisaloite.fi | `data/cache/initiatives.json` |
+| `scripts/fetch_economy.py` | Eurostat: luottamusindikaattori (ESI) ja työttömyysaste | `data/cache/economy.json` |
 | `scripts/build.py` | kaikki yllä | `data/site.json` |
 
 Vain Pythonin standardikirjasto. GitHub Actions (`.github/workflows/update.yml`) ajaa kaiken kerran vuorokaudessa ja committaa muuttuneen datan.

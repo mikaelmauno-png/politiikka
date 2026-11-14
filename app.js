@@ -81,39 +81,65 @@ addEventListener("scroll", hideTip, { passive: true });
 })();
 
 /* ---------- generic line chart ---------- */
-function lineChart(el, { xs, xLabel, series, yFmt = (v) => fmt(v, 0), height = 300, yMin, endLabels = true, unit = "%" }) {
+function lineChart(el, { xs, xLabel, series, yFmt = (v) => fmt(v, 0), height = 300, yMin, endLabels = true, unit = "%",
+                         pos, bands = [], ticks, dashLast = false, tipExtra }) {
+  // pos: numeric x position per point (default: index). bands: [{from, to, label, color, title}] in pos units.
+  // dashLast: draw each series' final segment dashed (e.g. "polls now" after the last election).
   el.innerHTML = "";
   const W = el.clientWidth || 600, H = height;
-  const m = { l: 34, r: endLabels ? 46 : 12, t: 10, b: 24 };
+  const P = pos || xs.map((_, i) => i);
+  const m = { l: 34, r: endLabels ? 46 : 12, t: bands.length ? 34 : 10, b: 24 };
   const vals = series.flatMap((s) => s.values).filter((v) => v != null);
   if (!vals.length) return;
   let lo = yMin != null ? yMin : Math.min(...vals), hi = Math.max(...vals);
   const step = niceStep(hi - lo || 1, 5);
   lo = Math.floor(lo / step) * step; hi = Math.ceil(hi / step) * step;
-  const x = scale(0, xs.length - 1, m.l, W - m.r), y = scale(lo, hi, H - m.b, m.t);
+  const x0 = Math.min(P[0], ...bands.map((b) => b.from)), x1 = Math.max(P[P.length - 1], ...bands.map((b) => b.to));
+  const x = scale(x0, x1, m.l, W - m.r), y = scale(lo, hi, H - m.b, m.t);
   const root = svg("svg", { width: W, height: H, role: "img" }, el);
+  // background bands (e.g. governments)
+  bands.forEach((b, i) => {
+    const bx = x(Math.max(b.from, x0)), bw = Math.max(0, x(Math.min(b.to, x1)) - bx);
+    if (i % 2 === 0) svg("rect", { x: bx, y: m.t, width: bw, height: H - m.t - m.b, fill: "var(--rule-2)", opacity: 0.6 }, root);
+    svg("rect", { x: bx + 0.5, y: m.t - 6, width: Math.max(0, bw - 1), height: 4, fill: b.color, rx: 1 }, root);
+    if (bw > 18) {
+      const t = text(root, bx + bw / 2, m.t - 10, b.label, { "text-anchor": "middle", "font-size": bw < 44 ? 9 : 10 });
+      if (bw < 44) { t.setAttribute("transform", `rotate(-35 ${bx + bw / 2} ${m.t - 10})`); t.setAttribute("text-anchor", "start"); }
+    }
+  });
   const g = svg("g", { class: "grid" }, root);
   for (let v = lo; v <= hi + 1e-9; v += step) {
     svg("line", { x1: m.l, x2: W - m.r, y1: y(v), y2: y(v) }, g);
     text(root, m.l - 6, y(v) + 4, yFmt(v), { "text-anchor": "end" });
   }
-  const every = Math.max(1, Math.ceil(xs.length / Math.max(2, Math.floor((W - m.l - m.r) / 70))));
-  xs.forEach((d, i) => { if (i % every === 0 || i === xs.length - 1 && xs.length < 20) text(root, x(i), H - 6, xLabel(d), { "text-anchor": "middle" }); });
+  if (ticks) {
+    const minGap = 34; let last = -1e9;
+    for (const t of ticks) { const tx = x(t.pos); if (Math.abs(tx - last) >= minGap) { text(root, tx, H - 6, t.label, { "text-anchor": "middle" }); last = tx; } }
+  } else {
+    const every = Math.max(1, Math.ceil(xs.length / Math.max(2, Math.floor((W - m.l - m.r) / 70))));
+    xs.forEach((d, i) => { if (i % every === 0 || i === xs.length - 1 && xs.length < 20) text(root, x(P[i]), H - 6, xLabel(d), { "text-anchor": "middle" }); });
+  }
   for (const s of series) {
+    const idx = s.values.map((v, i) => (v == null ? -1 : i)).filter((i) => i >= 0);
     let d = "", pen = false;
     s.values.forEach((v, i) => {
       if (v == null) { pen = false; return; }
-      d += (pen ? "L" : "M") + x(i).toFixed(1) + "," + y(v).toFixed(1);
+      if (dashLast && i === idx[idx.length - 1] && idx.length > 1) return;
+      d += (pen ? "L" : "M") + x(P[i]).toFixed(1) + "," + y(v).toFixed(1);
       pen = true;
     });
     svg("path", { d, fill: "none", stroke: s.color, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }, root);
-    if (s.dots) s.values.forEach((v, i) => v != null && svg("circle", { cx: x(i), cy: y(v), r: 3, fill: s.color, stroke: "var(--bg)", "stroke-width": 1.5 }, root));
+    if (dashLast && idx.length > 1) {
+      const a = idx[idx.length - 2], b = idx[idx.length - 1];
+      svg("path", { d: `M${x(P[a])},${y(s.values[a])}L${x(P[b])},${y(s.values[b])}`, fill: "none", stroke: s.color, "stroke-width": 2, "stroke-dasharray": "3 4", "stroke-linecap": "round" }, root);
+    }
+    if (s.dots) idx.forEach((i, k) => svg("circle", { cx: x(P[i]), cy: y(s.values[i]), r: 3, fill: dashLast && k === idx.length - 1 ? "var(--bg)" : s.color, stroke: dashLast && k === idx.length - 1 ? s.color : "var(--bg)", "stroke-width": 1.5 }, root));
   }
   if (endLabels) {
     const labs = series.map((s) => {
       let i = s.values.length - 1;
       while (i >= 0 && s.values[i] == null) i--;
-      return i < 0 ? null : { s, y: y(s.values[i]), x: x(i) };
+      return i < 0 ? null : { s, y: y(s.values[i]), x: x(P[i]) };
     }).filter(Boolean).sort((a, b) => a.y - b.y);
     for (let i = 1; i < labs.length; i++) if (labs[i].y - labs[i - 1].y < 12) labs[i].y = labs[i - 1].y + 12;
     for (const l of labs) text(root, l.x + 6, l.y + 4, l.s.short || l.s.key, { class: "lab" });
@@ -122,12 +148,13 @@ function lineChart(el, { xs, xLabel, series, yFmt = (v) => fmt(v, 0), height = 3
   const cross = svg("line", { y1: m.t, y2: H - m.b, stroke: "var(--ink-3)", "stroke-width": 1, visibility: "hidden" }, root);
   const hit = svg("rect", { x: m.l, y: 0, width: W - m.l - m.r, height: H, fill: "transparent" }, root);
   onTip(hit, (ev) => {
-    const r = root.getBoundingClientRect();
-    const i = Math.max(0, Math.min(xs.length - 1, Math.round(x.inv(ev.clientX - r.left))));
-    cross.setAttribute("x1", x(i)); cross.setAttribute("x2", x(i)); cross.setAttribute("visibility", "visible");
+    const r = root.getBoundingClientRect(), px = x.inv(ev.clientX - r.left);
+    let i = 0;
+    P.forEach((p, k) => { if (Math.abs(p - px) < Math.abs(P[i] - px)) i = k; });
+    cross.setAttribute("x1", x(P[i])); cross.setAttribute("x2", x(P[i])); cross.setAttribute("visibility", "visible");
     const rows = series.filter((s) => s.values[i] != null).sort((a, b) => b.values[i] - a.values[i])
       .map((s) => `<div class="row"><span><span class="pdot" style="background:${s.color}"></span>${esc(s.name)}</span><b>${fmt(s.values[i])} ${unit}</b></div>`).join("");
-    showTip(ev, `<b>${esc(xLabel(xs[i]))}</b>${rows}`);
+    showTip(ev, `<b>${esc(xLabel(xs[i]))}</b>${tipExtra ? tipExtra(i) : ""}${rows}`);
     tipCleanup = () => cross.setAttribute("visibility", "hidden");
   });
   hit.addEventListener("mouseleave", () => { cross.setAttribute("visibility", "hidden"); hideTip(); });
@@ -360,9 +387,9 @@ function renderParliament() {
     <div class="grid2">
       <div>
         <div class="panel-title"><span>Ryhmien yhtenäisyys ja läsnäolo</span><span class="meta">yhtenäisyys kiistanalaisissa äänestyksissä</span></div>
-        <table class="data"><thead><tr><th>Ryhmä</th><th class="num">Yhtenäisyys</th><th class="num">Poikk. / 1000</th><th class="num">Läsnäolo</th></tr></thead><tbody>
+        <div class="scroll-x"><table class="data"><thead><tr><th>Ryhmä</th><th class="num">Yhtenäisyys</th><th class="num">Poikk. / 1000</th><th class="num">Läsnäolo</th></tr></thead><tbody>
         ${parties.map((r) => `<tr><td><span class="pdot" style="background:${pc(r.p)}"></span>${NAMES[r.p]}</td><td class="num">${fmt(r.coh)}</td><td class="num">${fmt(r.per1000)}</td><td class="num">${fmt(r.att)} %</td></tr>`).join("")}
-        </tbody></table>
+        </tbody></table></div>
         <div class="panel-title" style="margin-top:28px"><span>Äänestykset kuukausittain</span><span class="meta"><span class="pdot" style="background:var(--lasku)"></span>hallituksen tappiot</span></div>
         <div class="chart" id="voteBars"></div>
       </div>
@@ -441,12 +468,33 @@ function setupCompass() {
       <div class="panel-title"><span>Ryhmien sijainnit</span><span class="meta" id="compSub"></span></div>
       <table class="data" id="compTable"></table>
       <div class="legend-note" style="margin-top:12px">Vaaka-akseli: oppositio vasemmalla, hallitus oikealla. Pystyakseli: toinen ulottuvuus, suunnattu niin että PS on Vihreitä ylempänä. Liukurin kartat lasketaan kukin 12 kuukauden äänestyksistä erikseen ja käännetään koko kauden kartan suuntaan.</div>
-    </div></div>`;
+    </div></div>
+    ${C.defining ? `<div class="grid2" style="margin-top:28px">${axisExplain(C, 0)}${axisExplain(C, 1)}</div>` : ""}`;
   $("compSlider").addEventListener("input", (ev) => { state.compassIdx = opts[+ev.target.value].i; drawCompass(); });
   $("compSlider").dataset.labels = JSON.stringify(opts.map((o) => o.label));
   legend($("compLegend"), D.parties.map((p) => ({ key: p, name: p, color: pc(p) })));
   drawCompass();
 }
+function axisExplain(C, dim) {
+  const P = C.full.parties, names = Object.keys(P).sort((a, b) => P[a][dim] - P[b][dim]);
+  const vals = names.map((p) => P[p][dim]).sort((a, b) => a - b), med = vals[Math.floor(vals.length / 2)];
+  const out = names.filter((p) => Math.abs(P[p][dim] - med) > 0.1);
+  const rest = names.filter((p) => !out.includes(p));
+  const pos = (v) => fmt(v * 100, 0);
+  const ends = dim === 0 ? ["vasemmalla", "oikealla"] : ["alhaalla", "ylhäällä"];
+  const strength = Math.round((100 * C.explained[1]) / C.explained[0]);
+  const summary = dim === 0
+    ? `Erottelee lähes täysin hallituksen (${D.government.join(", ")}) ja opposition. Keskellä ne, jotka äänestävät välillä hallituksen kanssa.`
+    : `Selvästi muista erottuvat ${out.map((p) => `<b>${p}</b> (${pos(P[p][dim])})`).join(", ") || "ei kukaan"}; muut ryhmät välillä ${pos(P[rest[0]][dim])}…${pos(P[rest[rest.length - 1]][dim])}. Akseli on noin ${strength} % ensimmäisen vahvuudesta, joten erot ovat pieniä.`;
+  const rows = C.defining[dim].map((v) => `<li>${esc(v.item.length > 120 ? v.item.slice(0, 117) + "…" : v.item)}
+    <div class="meta"><span>${esc(v.title)}</span><span style="white-space:nowrap">${new Date(v.t).toLocaleDateString("fi-FI")}</span></div>
+    <div class="meta"><span>${ends[1]} <b>${v.high === "J" ? "jaa" : "ei"}</b>, ${ends[0]} <b>${v.high === "J" ? "ei" : "jaa"}</b></span><span>${v.res[0]}–${v.res[1]}</span></div></li>`).join("");
+  return `<div><div class="panel-title"><span>${dim === 0 ? "Vaaka-akseli" : "Pystyakseli"}: mikä sen määrää?</span></div>
+    <p class="lede" style="margin:0 0 6px">${summary}</p>
+    <div class="legend-note" style="margin:0 0 4px">Äänestykset, jotka erottavat akselin päät parhaiten:</div>
+    <ul class="ini">${rows}</ul></div>`;
+}
+
 function drawCompass() {
   const C = D.compass; if (!C) return;
   const el = $("compassChart");
@@ -532,15 +580,105 @@ function drawIniBars() {
 }
 
 /* ---------- history ---------- */
+const ymPos = (s) => +s.slice(0, 4) + (+s.slice(5, 7) - 1) / 12;
+function governmentBands(nowPos) {
+  const govs = D.history.governments.map((g) => ({ ...g, from: ymPos(g.start), to: g.end ? ymPos(g.end) : nowPos }));
+  const bands = govs.map((g) => ({ from: g.from, to: g.to, label: g.name.split(" / ")[0], color: pc(g.parties[0]) }));
+  const govAt = (t) => govs.find((g) => t >= g.from && t < g.to) || govs[govs.length - 1];
+  return { bands, govAt };
+}
+const govRow = (g) => `<div class="row" style="color:var(--ink-3)"><span>Hallitus: ${esc(g.name)} (${g.parties.join(", ")})</span></div>`;
+
+function renderEconomy() {
+  const E = D.economy; if (!E) return;
+  if (!state.econMode) {
+    state.econMode = "esi";
+    $("econMode").addEventListener("click", (ev) => {
+      const b = ev.target.closest("button"); if (!b) return;
+      state.econMode = b.dataset.m;
+      for (const x of $("econMode").children) x.classList.toggle("on", x === b);
+      renderEconomy();
+    });
+  }
+  const isEsi = state.econMode === "esi", data = E[state.econMode];
+  const xs = data.map((r) => r[0]), pos = xs.map(ymPos);
+  const { bands, govAt } = governmentBands(pos[pos.length - 1] + 1 / 12);
+  const ticks = [];
+  for (let y = Math.ceil(pos[0] / 5) * 5; y <= pos[pos.length - 1]; y += 5) ticks.push({ pos: y, label: String(y) });
+  lineChart($("econChart"), {
+    xs, pos, endLabels: false, height: 300, unit: isEsi ? "" : "%",
+    bands: bands.filter((b) => b.to > pos[0]).map((b) => ({ ...b, from: Math.max(b.from, pos[0]) })),
+    series: [{ key: state.econMode, name: isEsi ? "Luottamusindikaattori" : "Työttömyysaste", color: "var(--ink)", values: data.map((r) => r[1]) }],
+    yMin: isEsi ? undefined : 0, xLabel: ml, ticks,
+    tipExtra: (i) => govRow(govAt(pos[i])),
+  });
+  $("econNote").textContent = isEsi
+    ? "Euroopan komission luottamusindikaattori (ESI): yritysten ja kuluttajien luottamuksen yhdistelmä, kausitasoitettu, pitkän aikavälin keskiarvo = 100. Taustan jaksot ovat hallituksia; yläreunan väri = pääministeripuolue."
+    : "Työttömyysaste, trendi (% työvoimasta), Eurostat. Taustan jaksot ovat hallituksia; yläreunan väri = pääministeripuolue.";
+}
+
+const SMALL_NAMES = {
+  SKP: "Suomen Kommunistinen Puolue", LIBE: "Liberaalipuolue – Vapaus valita", "Piraattip.": "Piraattipuolue",
+  EOP: "Eläinoikeuspuolue", FP: "Feministinen puolue", SKE: "Suomen Kansa Ensin", KRIP: "Kristallipuolue",
+  VKK: "Valta kuuluu kansalle", VL: "Vapauden liitto", KaL: "Kansalaispuolue", STL: "Seitsemän tähden liike",
+  KTP: "Kommunistinen Työväenpuolue", STP: "Suomen Työväenpuolue", KA: "Köyhien Asialla", Muutos2011: "Muutos 2011",
+  SSP: "Suomen Senioripuolue", SKS: "Suomen Kansan Sinivalkoiset", KIPU: "Kirjava ”Puolue” – Elonkehän Puolue",
+  REM: "Remonttiryhmä", LLP: "Luonnonlakipuolue", SEP: "Suomen Eläkeläisten Puolue",
+};
+function renderAllParties() {
+  const A = D.history.allParties; if (!A || !Object.keys(A).length) return;
+  if (!state.allMode) {
+    state.allMode = "share";
+    $("allMode").addEventListener("click", (ev) => {
+      const b = ev.target.closest("button"); if (!b) return;
+      state.allMode = b.dataset.m;
+      for (const x of $("allMode").children) x.classList.toggle("on", x === b);
+      renderAllParties();
+    });
+  }
+  const years = Object.keys(D.history.national).sort(), last = years[years.length - 1];
+  const lastYear = (r) => Object.keys(r.votes).sort().pop();
+  const rows = Object.values(A).sort((a, b) => {
+    const tail = (r) => (/^Muu/.test(r.abbr) ? 1 : 0);
+    return tail(a) - tail(b) || (b.votes[last] || 0) - (a.votes[last] || 0) || lastYear(b).localeCompare(lastYear(a)) ||
+      Math.max(...Object.values(b.votes)) - Math.max(...Object.values(a.votes));
+  });
+  const cell = (r, y) => {
+    const v = r.votes[y]; if (!v) return `<td class="num"></td>`;
+    if (state.allMode === "votes") return `<td class="num">${v.toLocaleString("fi-FI")}</td>`;
+    const sh = r.share[y];
+    return `<td class="num${sh != null && sh < 1 ? " dim" : ""}">${sh ? fmt(sh) : "<0,1"}</td>`;
+  };
+  const best = (r) => { const y = Object.keys(r.votes).sort((a, b) => r.votes[b] - r.votes[a])[0]; return `${state.allMode === "votes" ? r.votes[y].toLocaleString("fi-FI") : (r.share[y] ? fmt(r.share[y]) + " %" : "<0,1 %")} (${y})`; };
+  $("allParties").innerHTML = `<thead><tr><th>Puolue</th>${years.map((y) => `<th class="num">${y}</th>`).join("")}<th class="num">Paras</th></tr></thead><tbody>${
+    rows.map((r) => {
+      const base = r.abbr.replace(/ \(\d{4}\)$/, ""), full = NAMES[base] && base !== "Muut" ? NAMES[base] : SMALL_NAMES[base];
+      const dot = D.parties.includes(base) ? `<span class="pdot" style="background:${pc(base)}"></span>` : "";
+      return `<tr><td style="white-space:nowrap">${dot}<b title="${esc(full || r.abbr)}">${esc(r.abbr)}</b>${full && full !== base ? ` <span class="fullname">${esc(full)}</span>` : ""}</td>${years.map((y) => cell(r, y)).join("")}<td class="num" style="white-space:nowrap">${best(r)}</td></tr>`;
+    }).join("")}</tbody>`;
+}
+
 function renderHistory() {
   const N = D.history.national, years = Object.keys(N).sort();
   if (!state.histHidden) state.histHidden = new Set();
   legend($("histLegend"), D.parties.map((p) => ({ key: p, name: p, color: pc(p), off: state.histHidden.has(p) })),
     (k) => { state.histHidden.has(k) ? state.histHidden.delete(k) : state.histHidden.add(k); renderHistory(); });
+  // Real time axis: elections in spring (~year + 0.25), plus today's poll average as a dashed "now" point.
+  const ym = (s) => +s.slice(0, 4) + (+s.slice(5, 7) - 1) / 12;
+  const today = new Date(), nowPos = today.getFullYear() + today.getMonth() / 12;
+  const xs = [...years, "nyt"], pos = [...years.map((y) => +y + 0.25), nowPos];
   const series = D.parties.filter((p) => !state.histHidden.has(p)).map((p) => ({
-    key: p, name: NAMES[p], color: pc(p), dots: true, values: years.map((y) => N[y][p] ?? null),
+    key: p, name: NAMES[p], color: pc(p), dots: true, values: [...years.map((y) => N[y][p] ?? null), D.polls.latest[p] ?? null],
   }));
-  lineChart($("histChart"), { xs: years, xLabel: (y) => y, series, yMin: 0, height: 300 });
+  const { bands, govAt } = governmentBands(nowPos);
+  lineChart($("histChart"), {
+    xs, pos, bands, series, yMin: 0, height: 340, dashLast: true,
+    xLabel: (y) => (y === "nyt" ? "Mittaukset nyt" : `Eduskuntavaalit ${y}`),
+    ticks: [...years.map((y) => ({ pos: +y + 0.25, label: y })), { pos: nowPos, label: "nyt" }].reverse(),
+    tipExtra: (i) => govRow(govAt(pos[i] - 0.01)),
+  });
+  renderEconomy();
+  renderAllParties();
   $("govList").innerHTML = [...D.history.governments].reverse().map((g) =>
     `<div class="gov"><b>${esc(g.name)}</b><span class="y">${g.start.slice(0, 4)}–${g.end ? g.end.slice(0, 4) : ""}</span>
      <span class="ps">${g.parties.map((p) => `<span style="white-space:nowrap;margin-right:8px"><span class="pdot" style="background:${pc(p)};margin-right:4px"></span>${p}</span>`).join("")}${g.note ? `<span class="note">${esc(g.note)}</span>` : ""}</span></div>`).join("");
