@@ -17,17 +17,17 @@ ELECTIONS = [
             ("Sosiaali- ja terveyspalvelut on tuotettava ensisijaisesti julkisina palveluina", -1),
             ("Vanhustenhoidon ulkoistamista yksityisille toimijoille tulee lisätä", +1),
             ("On oikein, että yhteiskunnassa jotkut ryhmät ovat paremmassa asemassa kuin toiset", +1),
+            ("Oppivelvollisuus pitää ulottaa myös ammatilliseen koulutukseen ja lukioon", -1),
         ],
         "values": [
             ("Parantumattomasti sairaalla on oltava oikeus eutanasiaan", -1),
             ("Sukupuolen korjaamisen tulee olla mahdollista myös alle 18-vuotiaille", -1),
-            ("Viinit ja vahvat oluet pitää saada ruokakauppoihin", -1),
             ("Perhevapaita pitää uudistaa niin, että vapaat jakautuvat tasan", -1),
             ("Maahanmuuttajien määrän kasvu on lisännyt turvattomuutta", +1),
             ("Vihapuhe tulee määritellä ja asettaa rangaistavaksi", -1),
             ("Perinteiset arvot ovat hyvän elämän perusta", +1),
             ("Suomessa tarvitaan nyt koviakin keinoja järjestyksen", +1),
-            ("On olemassa pyhiä tai muuten yksilöä suurempia asioita", +1),
+            ("Sosiaali- ja terveyspalveluiden rahoittaminen vaatii työperäisen maahanmuuton", -1),
         ],
     },
     {
@@ -35,8 +35,8 @@ ELECTIONS = [
         "economy": [
             ("Eniten ansaitsevat ihmiset voisivat maksaa enemmän kuntaveroa", -1),
             ("Kun kunnan menoja ja tuloja tasapainotetaan, se on tehtävä mieluummin menoja karsimalla", +1),
-            ("Kaikille vanhuksille on taattava oikeus palvelukotipaikkaan", -1),
             ("Lähikirjastoja tarvitaan nykyistä vähemmän", +1),
+            ("Soteuudistuksessa syntyville maakunnille pitää antaa oikeus kerätä veroa", -1),
         ],
         "values": [
             ("Kuntani pärjäisi hyvin ilman maahanmuuttoa", +1),
@@ -47,6 +47,7 @@ ELECTIONS = [
             ("Politiikassa tarvitaan vahvoja johtajia", +1),
             ("Kuntani pitää järjestää liputus Pride-tapahtuman kunniaksi", -1),
             ("Äänioikeuden ikäraja kuntavaaleissa pitäisi laskea 16 vuoteen", -1),
+            ("Kuntani valtuusto tarvitsee käyttäytymisohjeet", -1),
         ],
     },
     {
@@ -70,6 +71,7 @@ ELECTIONS = [
             ("Suomen pitää vastaanottaa nykyistä vähemmän kiintiöpakolaisia", +1),
             ("Työperäistä maahanmuuttoa tarvitaan", -1),
             ("Suomen pitää pystyä karkottamaan nykyistä helpommin rikoksia tehneitä", +1),
+            ("Kehitysyhteistyöhön käytettäviä varoja on leikattava", +1),
         ],
     },
     {
@@ -77,12 +79,12 @@ ELECTIONS = [
         "economy": [
             ("Julkisen terveydenhuollon asiakasmaksuja pitäisi alentaa", -1),
             ("On oikein, että julkisella rahalla tuetaan ihmisten käymistä yksityisessä terveydenhuollossa", +1),
-            ("Vanhusten ympärivuorokautiseen palveluasumiseen pitää lisätä paikkoja", -1),
             ("Jos kunnan tuloja ja menoja tasapainotetaan, se on tehtävä mieluummin menoja leikkaamalla", +1),
             ("Pääomatulot on pidettävä kunnallisverotuksen ulkopuolella", +1),
             ("Kunnan on ostettava ensisijaisesti palveluita omistamiltaan yhtiöiltä", -1),
             ("Hyvinvointialueiden pitää tehdä säästöt vaaditussa ajassa", +1),
             ("Kirjastoja pitäisi muuttaa itsepalvelukirjastoiksi", +1),
+            ("Hyvinvointialueille pitää antaa oikeus kerätä veroa", -1),
         ],
         "values": [
             ("Hyvinvointialueeni on tarjottava paperittomille ihmisille", -1),
