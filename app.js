@@ -67,17 +67,43 @@ addEventListener("pointerdown", (ev) => { if (!ev.target.closest?.(".hit")) hide
 addEventListener("scroll", hideTip, { passive: true });
 
 /* ---------- theme ---------- */
+// "auto" = no data-theme attribute, so the device's light/dark setting decides (style.css media query).
+// index.html sets the saved theme in <head> before the page draws; this also covers a cached older index.html.
+const THEMES = [["auto", "Automaattinen"], ["light", "Vaalea"], ["dark", "Tumma"], ["vaporwave", "Vaporwave"],
+  ["newspaper", "Sanomalehti"], ["aurora", "Revontulet"], ["contrast", "Suuri kontrasti"]];
+const THEME_BARS = { light: "#ffffff", dark: "#151514", vaporwave: "#0b0814", newspaper: "#f1ece0", aurora: "#060b12", contrast: "#000000" };
 (function theme() {
-  let saved = null;
-  try { saved = localStorage.getItem("theme"); } catch (e) {}
-  if (saved) document.documentElement.dataset.theme = saved;
-  $("themeBtn").addEventListener("click", () => {
-    const cur = document.documentElement.dataset.theme ||
-      (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-    const next = cur === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = next;
-    try { localStorage.setItem("theme", next); } catch (e) {}
+  let saved = "auto";
+  try { saved = localStorage.getItem("theme") || "auto"; } catch (e) {}
+  if (!THEMES.some(([k]) => k === saved)) saved = "auto";
+  const apply = (t) => {
+    if (t === "auto") delete document.documentElement.dataset.theme;
+    else document.documentElement.dataset.theme = t;
+    const bar = document.querySelector('meta[name="theme-color"]');
+    const shown = t === "auto" ? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : t;
+    if (bar) bar.content = THEME_BARS[shown];
+  };
+  apply(saved);
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { if (saved === "auto") apply("auto"); });
+  const btn = $("themeBtn");
+  if (!btn) return;
+  // An invisible native <select> over the round button: a compact control with the phone's own picker
+  const wrap = document.createElement("span");
+  wrap.className = "theme-pick";
+  btn.replaceWith(wrap);
+  btn.tabIndex = -1;
+  btn.setAttribute("aria-hidden", "true");
+  const sel = document.createElement("select");
+  sel.setAttribute("aria-label", "Teema");
+  sel.title = "Teema";
+  sel.innerHTML = THEMES.map(([k, n]) => `<option value="${k}">${n}</option>`).join("");
+  sel.value = saved;
+  sel.addEventListener("change", () => {
+    saved = sel.value;
+    try { localStorage.setItem("theme", saved); } catch (e) {}
+    apply(saved);
   });
+  wrap.append(btn, sel);
 })();
 
 /* ---------- generic line chart ---------- */

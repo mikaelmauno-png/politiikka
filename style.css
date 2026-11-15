@@ -68,6 +68,47 @@
   --heat-0: #232321; --heat-1: #79c08e;
 }
 
+/* ---------- Optional themes (from the theme kit). Party colors keep their identity:
+   the dark themes reuse the brighter dark-mode party colors. ---------- */
+:root:is([data-theme="vaporwave"], [data-theme="aurora"], [data-theme="contrast"]) {
+  color-scheme: dark;
+  --p-KOK: #4a8be0; --p-PS: #d9ac33; --p-SDP: #e8555f; --p-KESK: #4fa84d; --p-VAS: #c4485f;
+  --p-VIHR: #93d062; --p-RKP: #ecd05a; --p-KD: #8d7fe0; --p-LIIK: #ec84b4;
+}
+/* Vaporwave: near-black night, neon accents, orange -> pink -> violet sunset gradient */
+:root[data-theme="vaporwave"] {
+  --bg: #0b0814; --surface: #110c1d; --ink: #ece8f6; --ink-2: #c4bce0; --ink-3: #9a8fc0;
+  --rule: #2c2244; --rule-2: #18112a; --accent: #a46bff;
+  --nousu: #3df5c8; --hidastuminen: #ffb347; --lasku: #ff3d7f; --elpyminen: #8088ff;
+  --gov: #2ee6e6; --opp: #ff9f43; --heat-0: #18112a; --heat-1: #a46bff;
+  --signature: linear-gradient(90deg, #ff9f43, #ff3d7f 50%, #a46bff);
+  --head-bg: rgb(11 8 20 / 0.86);
+}
+/* Sanomalehti: cream paper, ink, oxblood accent, serif type */
+:root[data-theme="newspaper"] {
+  color-scheme: light;
+  --bg: #f1ece0; --surface: #faf7ef; --ink: #1c1a17; --ink-2: #4a443c; --ink-3: #6b645a;
+  --rule: #d9d1c0; --rule-2: #e8e1d1; --accent: #8b1e1e;
+  --nousu: #2f6b2f; --hidastuminen: #c2a06a; --lasku: #9b2c2c; --elpyminen: #6f8bb8;
+  --gov: #1f4e79; --opp: #7b4b94; --heat-0: #ebe4d4; --heat-1: #8b1e1e;
+}
+/* Revontulet: northern night sky, aurora green -> ice blue -> violet */
+:root[data-theme="aurora"] {
+  --bg: #060b12; --surface: #0b1420; --ink: #e6f1ff; --ink-2: #b4c6dc; --ink-3: #8299b5;
+  --rule: #1d2d42; --rule-2: #0f1a28; --accent: #4ff0b4;
+  --nousu: #4ff0b4; --hidastuminen: #f5d76e; --lasku: #ff7a90; --elpyminen: #5cc8ff;
+  --gov: #4ff0b4; --opp: #c08bff; --heat-0: #0f1a28; --heat-1: #4ff0b4;
+  --signature: linear-gradient(90deg, #4ff0b4, #5cc8ff 50%, #c08bff);
+  --head-bg: rgb(6 11 18 / 0.86);
+}
+/* Suuri kontrasti: black, white and yellow; easiest to read in sunlight */
+:root[data-theme="contrast"] {
+  --bg: #000000; --surface: #000000; --ink: #ffffff; --ink-2: #e0e0e0; --ink-3: #c0c0c0;
+  --rule: #8a8a8a; --rule-2: #262626; --accent: #ffff00;
+  --nousu: #00ff7f; --hidastuminen: #ffd700; --lasku: #ff6060; --elpyminen: #00bfff;
+  --gov: #ffff00; --opp: #ff69b4; --heat-0: #1a1a1a; --heat-1: #ffff00;
+}
+
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 64px; }
 body {
@@ -250,3 +291,71 @@ table.data td.dim { color: var(--ink-3); }
 .pick-chips button { border: 1px solid var(--rule); background: none; color: var(--ink-3); border-radius: 999px; font: inherit; font-size: 12px; padding: 2px 9px; cursor: pointer; display: inline-flex; align-items: center; }
 .pick-chips button .pdot { width: 8px; height: 8px; margin-right: 5px; }
 .pick-chips button.on { background: var(--surface); color: var(--ink); border-color: var(--ink-3); font-weight: 600; }
+
+/* ---------- Theme decorations ---------- */
+.theme-pick { position: relative; flex: none; }
+.theme-pick select { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; font-size: 16px; }
+.theme-pick:focus-within .theme-btn { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+:root[data-theme="newspaper"] body { font-family: Georgia, "Times New Roman", serif; }
+:root[data-theme="newspaper"] .brand .name { font-weight: 900; text-transform: uppercase; letter-spacing: 0.04em; }
+:root[data-theme="contrast"] body { font-weight: 500; }
+
+/* Neon themes: background lives on <html>, header is translucent, gradient title and dividers, glowing phase word */
+:root[data-theme="vaporwave"] { background: radial-gradient(120% 40% at 50% 0%, #2a1340 0%, transparent 70%) #0b0814; min-height: 100%; }
+:root[data-theme="aurora"] {
+  min-height: 100%;
+  background:
+    radial-gradient(1px 1px at 12% 18%, rgb(255 255 255 / 0.7), transparent),
+    radial-gradient(1px 1px at 47% 62%, rgb(255 255 255 / 0.5), transparent),
+    radial-gradient(1.5px 1.5px at 78% 30%, rgb(255 255 255 / 0.6), transparent),
+    radial-gradient(1px 1px at 33% 85%, rgb(255 255 255 / 0.4), transparent),
+    radial-gradient(1px 1px at 88% 78%, rgb(255 255 255 / 0.5), transparent),
+    #060b12;
+  background-size: 260px 260px;
+}
+:root:is([data-theme="vaporwave"], [data-theme="aurora"]) body { background: transparent; }
+:root:is([data-theme="vaporwave"], [data-theme="aurora"]) header.top {
+  background: var(--head-bg); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  border-bottom: 1px solid; border-image: var(--signature) 1;
+}
+:root:is([data-theme="vaporwave"], [data-theme="aurora"]) .brand .name {
+  background: var(--signature); -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+:root[data-theme="aurora"] .brand .name { font-weight: 300; text-transform: uppercase; letter-spacing: 0.25em; font-size: 15px; }
+:root:is([data-theme="vaporwave"], [data-theme="aurora"]) .section-head { border-top: 2px solid; border-image: var(--signature) 1; }
+:root:is([data-theme="vaporwave"], [data-theme="aurora"]) nav.sections a.active { border-image: var(--signature) 1; }
+:root:is([data-theme="vaporwave"], [data-theme="aurora"]) .phase-big .word {
+  text-shadow: 0 0 14px color-mix(in srgb, currentColor 50%, transparent);
+}
+
+/* Revontulet: two soft aurora curtains drifting behind the page */
+:root[data-theme="aurora"] body::before,
+:root[data-theme="aurora"] body::after {
+  content: ""; position: fixed; left: -20%; right: -20%; top: -10vh; height: 70vh;
+  z-index: -1; pointer-events: none;
+  -webkit-mask-image: linear-gradient(180deg, #000 30%, transparent);
+  mask-image: linear-gradient(180deg, #000 30%, transparent);
+}
+:root[data-theme="aurora"] body::before {
+  background:
+    radial-gradient(40% 55% at 30% 35%, rgb(79 240 180 / 0.22), transparent 70%),
+    radial-gradient(30% 45% at 55% 25%, rgb(92 200 255 / 0.15), transparent 70%);
+  animation: aurora-drift 26s ease-in-out infinite alternate;
+}
+:root[data-theme="aurora"] body::after {
+  background:
+    radial-gradient(35% 50% at 75% 30%, rgb(192 139 255 / 0.2), transparent 70%),
+    radial-gradient(25% 40% at 45% 45%, rgb(79 240 180 / 0.11), transparent 70%);
+  animation: aurora-drift 38s ease-in-out infinite alternate-reverse;
+}
+@keyframes aurora-drift {
+  0%   { transform: translateX(-6%) scaleY(0.9);  opacity: 0.7; }
+  50%  { transform: translateX(2%)  scaleY(1.15); opacity: 1; }
+  100% { transform: translateX(7%)  scaleY(1);    opacity: 0.8; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme="aurora"] body::before, :root[data-theme="aurora"] body::after { animation: none; }
+}
+/* Bright neon phase colors need dark chip text */
+:root:is([data-theme="vaporwave"], [data-theme="aurora"], [data-theme="contrast"]) .chip { color: #0b0b10; }
